@@ -1,9 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'register_screen.dart';
+import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
+import '../providers/auth_provider.dart';
+
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _phoneController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _phoneController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,97 +41,130 @@ class LoginScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   _AuthCard(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'គណនី',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        const _Label(text: 'លេខទូរស័ព្ទ ឬ អ៊ីមែល'),
-                        const SizedBox(height: 8),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                            hintText: 'បញ្ចូលលេខទូរស័ព្ទ/អ៊ីមែល',
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        const _Label(text: 'ពាក្យសម្ងាត់'),
-                        const SizedBox(height: 8),
-                        TextFormField(
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            hintText: 'បញ្ចូលពាក្យសម្ងាត់',
-                            suffixIcon: Icon(Icons.visibility_off, size: 18),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {},
-                            child: const Text(
-                              'ភ្លេចពាក្យសម្ងាត់?',
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'គណនី',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF6E9E2E),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                          const SizedBox(height: 12),
+                          const _Label(text: 'លេខទូរស័ព្ទ ឬ អ៊ីមែល'),
+                          const SizedBox(height: 8),
+                          TextFormField(
+                            controller: _phoneController,
+                            decoration: const InputDecoration(
+                              hintText: 'បញ្ចូលលេខទូរស័ព្ទ/អ៊ីមែល',
+                            ),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'សូមបញ្ចូលលេខទូរស័ព្ទ ឬ អ៊ីមែល';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 12),
+                          const _Label(text: 'ពាក្យសម្ងាត់'),
+                          const SizedBox(height: 8),
+                          TextFormField(
+                            controller: _passwordController,
+                            obscureText: true,
+                            decoration: const InputDecoration(
+                              hintText: 'បញ្ចូលពាក្យសម្ងាត់',
+                              suffixIcon: Icon(Icons.visibility_off, size: 18),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.trim().length < 6) {
+                                return 'ពាក្យសម្ងាត់យ៉ាងតិច 6 តួអក្សរ';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                              onPressed: () {},
+                              child: const Text('ភ្លេចពាក្យសម្ងាត់?'),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF6E9E2E),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
-                            ),
-                            onPressed: () {},
-                            child: const Text(
-                              'ចូលប្រើប្រាស់',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        const _SocialButton(
-                          color: Color(0xFFF0F4E8),
-                          icon: FontAwesomeIcons.google,
-                          text: 'ចូលប្រើប្រាស់ដោយ Google',
-                        ),
-                        const SizedBox(height: 12),
-                        const _SocialButton(
-                          color: Color(0xFFF0F4E8),
-                          icon: FontAwesomeIcons.facebook,
-                          text: 'ចូលប្រើប្រាស់ដោយ Facebook',
-                          iconColor: Color(0xFF1877F2),
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text('មិនទាន់មានគណនី? '),
-                            TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const RegisterScreen(),
-                                  ),
-                                );
+                                if (_formKey.currentState?.validate() ??
+                                    false) {
+                                  context.read<AuthProvider>().login(
+                                    displayName: _phoneController.text,
+                                  );
+                                  Navigator.pushReplacementNamed(
+                                    context,
+                                    '/main',
+                                  );
+                                }
                               },
                               child: const Text(
-                                'ចុះឈ្មោះ',
-                                style: TextStyle(color: Color(0xFF7AA12B)),
+                                'ចូលប្រើប្រាស់',
+                                style: TextStyle(color: Colors.white),
                               ),
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          const SizedBox(height: 16),
+                          _SocialButton(
+                            color: Color(0xFFF0F4E8),
+                            icon: FontAwesomeIcons.google,
+                            text: 'ចូលប្រើប្រាស់ដោយ Google',
+                            onPressed: () {
+                              context.read<AuthProvider>().login(
+                                displayName: 'Google User',
+                              );
+                              Navigator.pushReplacementNamed(context, '/main');
+                            },
+                          ),
+                          const SizedBox(height: 12),
+                          _SocialButton(
+                            color: Color(0xFFF0F4E8),
+                            icon: FontAwesomeIcons.facebook,
+                            text: 'ចូលប្រើប្រាស់ដោយ Facebook',
+                            iconColor: Color(0xFF1877F2),
+                            onPressed: () {
+                              context.read<AuthProvider>().login(
+                                displayName: 'Facebook User',
+                              );
+                              Navigator.pushReplacementNamed(context, '/main');
+                            },
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text('មិនទាន់មានគណនី? '),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/register');
+                                },
+                                child: const Text(
+                                  'ចុះឈ្មោះ',
+                                  style: TextStyle(color: Color(0xFF7AA12B)),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -155,8 +206,8 @@ class _LogoHeader extends StatelessWidget {
         Container(
           width: 300,
           height: 100,
-          
-         // padding: const EdgeInsets.all(12),
+
+          // padding: const EdgeInsets.all(12),
           child: Image.asset('lib/assets/images/img1.png'),
         ),
         const SizedBox(height: 12),
@@ -187,7 +238,7 @@ class _AuthCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.95),
         borderRadius: BorderRadius.circular(20),
-       border: Border.all(color: const Color(0xFFB7D38B)),
+        border: Border.all(color: const Color(0xFFB7D38B)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -223,12 +274,14 @@ class _SocialButton extends StatelessWidget {
   final IconData icon;
   final String text;
   final Color? iconColor;
+  final VoidCallback? onPressed;
 
   const _SocialButton({
     required this.color,
     required this.icon,
     required this.text,
     this.iconColor,
+    this.onPressed,
   });
 
   @override

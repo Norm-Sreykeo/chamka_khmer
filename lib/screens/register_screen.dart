@@ -16,7 +16,7 @@ class RegisterScreen extends StatelessWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 16),
-                  _LogoHeader(title: 'ចម្ការខ្មែរ', subtitle: 'ជួយសហគមន៍កសិករ'),
+                  _LogoHeader(title: 'ចម្ការខ្មែរ', subtitle: 'ផ្លែឈើ និង បន្លែស្រស់ពីចម្ការ'),
                   const SizedBox(height: 20),
                   _AuthCard(
                     child: Column(
@@ -27,7 +27,6 @@ class RegisterScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF567321),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -80,7 +79,6 @@ class RegisterScreen extends StatelessWidget {
                             Checkbox(
                               value: true,
                               onChanged: (_) {},
-                              activeColor: const Color(0xFF7AA12B),
                             ),
                             const Expanded(
                               child: Text(
@@ -160,7 +158,6 @@ class _AuthBackground extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       ),
-      child: Container(color: const Color(0xFFB7D38B).withOpacity(0.65)),
     );
   }
 }
@@ -176,19 +173,9 @@ class _LogoHeader extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: 92,
-          height: 92,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 12,
-                offset: const Offset(0, 6),
-              ),
-            ],
-          ),
+          width: 300,
+          height: 100,
+          
           padding: const EdgeInsets.all(12),
           child: Image.asset('lib/assets/images/img1.png'),
         ),

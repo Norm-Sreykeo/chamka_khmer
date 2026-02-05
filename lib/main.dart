@@ -17,7 +17,9 @@ class ChamkaKhmerApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.green,
-        textTheme: GoogleFonts.khmerTextTheme(),
+        textTheme: GoogleFonts.siemreapTextTheme(
+          Theme.of(context).textTheme,
+        ),
         inputDecorationTheme: InputDecorationTheme(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),

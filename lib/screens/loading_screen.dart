@@ -35,7 +35,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
                     children: const [
                       _LoadingPage(
                         title: 'ចម្ការខ្មែរ',
-                        subtitle: 'ជួយសហគមន៍កសិករ',
+                        subtitle: 'ផ្លែឈើ និង បន្លែស្រស់ពីចម្ការ',
                       ),
                       _LoadingPage(
                         title: 'ទំនាក់ទំនងផ្ទាល់',
@@ -57,9 +57,25 @@ class _LoadingScreenState extends State<LoadingScreen> {
                       MaterialPageRoute(builder: (_) => const LoginScreen()),
                     );
                   },
+                  style: TextButton.styleFrom(
+                    backgroundColor: const Color(
+                      0xFF6E9E2E,
+                    ), // Background color
+                    foregroundColor: Colors.white, // Text color
+                      padding: const EdgeInsets.all(14),
+
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        8,
+                      ), // Radius (rounded corners)
+                    ),
+                  ),
                   child: const Text(
                     'ចូលទៅគណនី',
-                    style: TextStyle(color: Color(0xFF2E3A1F)),
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 239, 240, 239),
+                      fontSize: 16,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -86,19 +102,9 @@ class _LoadingPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.88),
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.15),
-                  blurRadius: 16,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
+            width: 300,
+            height: 300,
+            decoration: BoxDecoration(),
             padding: const EdgeInsets.all(14),
             child: Image.asset('lib/assets/images/img1.png'),
           ),
@@ -112,11 +118,7 @@ class _LoadingPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            subtitle,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 14, color: Color(0xFF4E5B3C)),
-          ),
+          Text(subtitle, textAlign: TextAlign.center),
         ],
       ),
     );
@@ -139,10 +141,7 @@ class _DotsIndicator extends StatelessWidget {
           margin: const EdgeInsets.symmetric(horizontal: 4),
           width: isActive ? 18 : 6,
           height: 6,
-          decoration: BoxDecoration(
-            color: isActive ? const Color(0xFF7AA12B) : const Color(0xFFCBDDB1),
-            borderRadius: BorderRadius.circular(12),
-          ),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
         );
       }),
     );
@@ -161,7 +160,6 @@ class _AuthBackground extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       ),
-      child: Container(color: const Color(0xFFB7D38B).withOpacity(0.65)),
     );
   }
 }

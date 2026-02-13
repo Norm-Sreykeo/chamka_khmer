@@ -62,7 +62,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
                       0xFF6E9E2E,
                     ), // Background color
                     foregroundColor: Colors.white, // Text color
-                      padding: const EdgeInsets.all(14),
+                    padding: const EdgeInsets.all(14),
 
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
@@ -106,7 +106,7 @@ class _LoadingPage extends StatelessWidget {
             height: 300,
             decoration: BoxDecoration(),
             padding: const EdgeInsets.all(14),
-            child: Image.asset('lib/assets/images/img1.png'),
+            child: Image.asset('assets/images/img1.png'),
           ),
           const SizedBox(height: 16),
           Text(
@@ -156,7 +156,7 @@ class _AuthBackground extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('lib/assets/images/background.png'),
+          image: AssetImage('assets/images/background.png'),
           fit: BoxFit.cover,
         ),
       ),

@@ -31,10 +31,26 @@ class CatalogProvider extends ChangeNotifier {
   Future<void> _loadData() async {
     await Future<void>.delayed(const Duration(milliseconds: 650));
     _categories.addAll(const [
-      Category(id: 'fruit', name: 'ផ្លែឈើ'),
-      Category(id: 'veg', name: 'បន្លែ'),
-      Category(id: 'herb', name: 'ស្លឹកឱសថ'),
-      Category(id: 'dry', name: 'ផលិតផលស្ងួត'),
+      Category(
+        id: 'fruit',
+        name: 'ផ្លែឈើ',
+        imagePath: 'assets/images/category/1.png',
+      ),
+      Category(
+        id: 'veg',
+        name: 'បន្លែ',
+        imagePath: 'assets/images/category/2.png',
+      ),
+      Category(
+        id: 'herb',
+        name: 'ស្លឹកឱសថ',
+        imagePath: 'assets/images/category/3.png',
+      ),
+      Category(
+        id: 'dry',
+        name: 'ផលិតផលស្ងួត',
+        imagePath: 'assets/images/category/4.png',
+      ),
     ]);
 
     _products.addAll(const [

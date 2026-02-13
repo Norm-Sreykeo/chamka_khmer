@@ -11,8 +11,8 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
   bool _agree = true;
@@ -39,10 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 children: [
                   const SizedBox(height: 16),
-                  _LogoHeader(
-                    title: 'ចម្ការខ្មែរ',
-                    subtitle: 'ផ្លែឈើ និង បន្លែស្រស់ពីចម្ការ',
-                  ),
+                  _LogoHeader(title: 'ធម្មជាតិ', subtitle: 'ធម្មជាតិ'),
                   const SizedBox(height: 20),
                   _AuthCard(
                     child: Form(
@@ -58,7 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           const SizedBox(height: 12),
-                          const _Label(text: 'ឈ្មោះ'),
+                          const _Label(text: 'ឈ្មោះពេញ'),
                           const SizedBox(height: 8),
                           TextFormField(
                             controller: _nameController,
@@ -68,21 +65,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
                                 return 'សូមបញ្ចូលឈ្មោះ';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 12),
-                          const _Label(text: 'លេខទូរស័ព្ទ'),
-                          const SizedBox(height: 8),
-                          TextFormField(
-                            controller: _phoneController,
-                            decoration: const InputDecoration(
-                              hintText: '012 345 678',
-                            ),
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return 'សូមបញ្ចូលលេខទូរស័ព្ទ';
                               }
                               return null;
                             },
@@ -196,13 +178,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           const _SocialButton(
                             color: Color(0xFFF0F4E8),
                             icon: FontAwesomeIcons.google,
-                            text: 'ចុះឈ្មោះដោយ Google',
+                            text: 'ចុះឈ្មោះជាមួយ Google',
                           ),
                           const SizedBox(height: 12),
                           const _SocialButton(
                             color: Color(0xFFF0F4E8),
                             icon: FontAwesomeIcons.facebook,
-                            text: 'ចុះឈ្មោះដោយ Facebook',
+                            text: 'ចុះឈ្មោះជាមួយ Facebook',
                             iconColor: Color(0xFF1877F2),
                           ),
                           const SizedBox(height: 12),
@@ -246,7 +228,7 @@ class _AuthBackground extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('lib/assets/images/background.png'),
+          image: AssetImage('assets/images/background.png'),
           fit: BoxFit.cover,
         ),
       ),
@@ -269,7 +251,7 @@ class _LogoHeader extends StatelessWidget {
           height: 100,
 
           padding: const EdgeInsets.all(12),
-          child: Image.asset('lib/assets/images/img1.png'),
+          child: Image.asset('assets/images/img1.png'),
         ),
         const SizedBox(height: 12),
         Text(

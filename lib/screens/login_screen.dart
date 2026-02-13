@@ -35,10 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 children: [
                   const SizedBox(height: 16),
-                  _LogoHeader(
-                    title: 'ចម្ការខ្មែរ',
-                    subtitle: 'ផ្លែឈើ និង បន្លែស្រស់ពីចម្ការ',
-                  ),
+                  _LogoHeader(title: 'ធម្មជាតិ', subtitle: 'ធម្មជាតិ'),
                   const SizedBox(height: 20),
                   _AuthCard(
                     child: Form(
@@ -54,16 +51,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           const SizedBox(height: 12),
-                          const _Label(text: 'លេខទូរស័ព្ទ ឬ អ៊ីមែល'),
+                          const _Label(text: 'ឈ្មោះអ្នកប្រើប្រាស់'),
                           const SizedBox(height: 8),
                           TextFormField(
                             controller: _phoneController,
                             decoration: const InputDecoration(
-                              hintText: 'បញ្ចូលលេខទូរស័ព្ទ/អ៊ីមែល',
+                              hintText: 'ឈ្មោះអ្នកប្រើប្រាស់',
                             ),
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
-                                return 'សូមបញ្ចូលលេខទូរស័ព្ទ ឬ អ៊ីមែល';
+                                return 'សូមបញ្ចូលឈ្មោះអ្នកប្រើប្រាស់';
                               }
                               return null;
                             },
@@ -117,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }
                               },
                               child: const Text(
-                                'ចូលប្រើប្រាស់',
+                                'ចូលគណនី',
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
@@ -126,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           _SocialButton(
                             color: Color(0xFFF0F4E8),
                             icon: FontAwesomeIcons.google,
-                            text: 'ចូលប្រើប្រាស់ដោយ Google',
+                            text: 'ចូលជាមួយ Google',
                             onPressed: () {
                               context.read<AuthProvider>().login(
                                 displayName: 'Google User',
@@ -138,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           _SocialButton(
                             color: Color(0xFFF0F4E8),
                             icon: FontAwesomeIcons.facebook,
-                            text: 'ចូលប្រើប្រាស់ដោយ Facebook',
+                            text: 'ចូលជាមួយ Facebook',
                             iconColor: Color(0xFF1877F2),
                             onPressed: () {
                               context.read<AuthProvider>().login(
@@ -157,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Navigator.pushNamed(context, '/register');
                                 },
                                 child: const Text(
-                                  'ចុះឈ្មោះ',
+                                  'ចុះឈ្មោះគណនីថ្មី',
                                   style: TextStyle(color: Color(0xFF7AA12B)),
                                 ),
                               ),
@@ -185,7 +182,7 @@ class _AuthBackground extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('lib/assets/images/background.png'),
+          image: AssetImage('assets/images/background.png'),
           fit: BoxFit.cover,
         ),
       ),
@@ -208,7 +205,7 @@ class _LogoHeader extends StatelessWidget {
           height: 100,
 
           // padding: const EdgeInsets.all(12),
-          child: Image.asset('lib/assets/images/img1.png'),
+          child: Image.asset('assets/images/img1.png'),
         ),
         const SizedBox(height: 12),
         Text(

@@ -10,6 +10,7 @@ class ProductProvider extends ChangeNotifier {
 
   bool _loading = false;
   bool get loading => _loading;
+  bool get isLoading => _loading;
 
   Future<void> loadProducts() async {
     _loading = true;

@@ -1,0 +1,12 @@
+// This file will contain the CustomButton widget implementation.
+import 'package:flutter/material.dart';
+
+class CustomButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {},
+      child: Text('Custom Button'),
+    );
+  }
+}

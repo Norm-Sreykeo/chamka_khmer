@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import '../../services/auth_service.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    final auth = AuthService();
+
     return Scaffold(
       backgroundColor: const Color(0xFFF6F3EA),
       appBar: AppBar(title: const Text("Register")),
@@ -12,19 +17,8 @@ class RegisterScreen extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-
             TextField(
-              decoration: InputDecoration(
-                labelText: "Full Name",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            TextField(
+              controller: emailController,
               decoration: InputDecoration(
                 labelText: "Email",
                 border: OutlineInputBorder(
@@ -36,6 +30,7 @@ class RegisterScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             TextField(
+              controller: passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 labelText: "Password",
@@ -54,8 +49,12 @@ class RegisterScreen extends StatelessWidget {
                   backgroundColor: const Color(0xFF7FBF5F),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                onPressed: () {
-                  Navigator.pop(context);
+                onPressed: () async {
+                  bool success = await auth.register(emailController.text, passwordController.text);
+
+                  if (success) {
+                    Navigator.pop(context);
+                  }
                 },
                 child: const Text("Create Account"),
               ),

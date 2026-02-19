@@ -70,10 +70,10 @@ flutter:
   assets:
     - lib/assets/images/background.png
     - lib/assets/images/img1.png
-    - lib/assets/images/icon/1.png
-    - lib/assets/images/icon/2.png
-    - lib/assets/images/icon/3.png
-    - lib/assets/images/icon/4.png
+    - lib/assets/icons/1.png
+    - lib/assets/icons/2.png
+    - lib/assets/icons/3.png
+    - lib/assets/icons/4.png
     # - assets/data/categories.json
     - lib/assets/data/products.json
 

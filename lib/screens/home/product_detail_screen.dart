@@ -1,77 +1,111 @@
 import 'package:flutter/material.dart';
 import '../../models/product.dart';
+import '../../widgets/quantity_selector.dart';
+import '../../widgets/custom_button.dart';
+import '../../core/theme/app_colors.dart';
 
-class ProductDetailScreen extends StatelessWidget {
+class ProductDetailScreen extends StatefulWidget {
   final Product product;
 
   const ProductDetailScreen({super.key, required this.product});
 
   @override
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+}
+
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  int qty = 1;
+
+  @override
   Widget build(BuildContext context) {
+    final product = widget.product;
+
     return Scaffold(
-      appBar: AppBar(title: Text(product.name)),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-
-            Center(
-              child: Image.network(product.imageUrl, height: 220),
-            ),
-
-            const SizedBox(height: 20),
-
-            Text(
-              product.name,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+      backgroundColor: const Color(0xFFF6F3EA),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(product.name),
+        leading: const BackButton(),
+        actions: const [
+          Icon(Icons.favorite_border),
+          SizedBox(width: 10)
+        ],
+      ),
+      body: Column(
+        children: [
+          /// 🖼 Product Image
+          Container(
+            margin: const EdgeInsets.all(16),
+            height: 220,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              image: DecorationImage(
+                image: NetworkImage(product.imageUrl),
+                fit: BoxFit.cover,
               ),
             ),
+          ),
 
-            const SizedBox(height: 10),
-
-            Text(
-              "${product.price} ៛ / ${product.unit}",
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.green,
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            Row(
-              children: [
-                const Icon(Icons.star, color: Colors.orange),
-                Text(product.rating.toString()),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            Text(product.description),
-
-            const Spacer(),
-
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF7FBF5F),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+          /// 📄 Details
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(30),
                 ),
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Added to cart")),
-                  );
-                },
-                child: const Text("Add to Cart"),
               ),
-            )
-          ],
-        ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(product.name,
+                      style: const TextStyle(
+                          fontSize: 22, fontWeight: FontWeight.bold)),
+
+                  const SizedBox(height: 6),
+                  Text("⭐ ${product.rating}"),
+
+                  const SizedBox(height: 15),
+                  const Text("ពិពណ៌នា",
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 6),
+                  Text(product.description ?? ""),
+
+                  const Spacer(),
+
+                  /// Quantity
+                  QuantitySelector(
+                    value: qty,
+                    onChanged: (v) => setState(() => qty = v),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  /// Price + Add to Cart
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "\$${product.price * qty}",
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      CustomButton(
+                        text: "ដាក់ក្នុងកន្ត្រក",
+                        onPressed: () {},
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

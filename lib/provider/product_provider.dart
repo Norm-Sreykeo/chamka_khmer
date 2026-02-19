@@ -1,31 +1,13 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 import '../models/product.dart';
-import '../services/api_service.dart';
 
-class ProductProvider extends ChangeNotifier {
-  final ApiService _apiService = ApiService();
+class ApiService {
 
-  List<Product> _products = [];
-  List<Product> get products => _products;
-
-  bool _loading = false;
-  bool get loading => _loading;
-  bool get isLoading => _loading;
-
-  Future<void> loadProducts() async {
-    _loading = true;
-    notifyListeners();
-
-    _products = await _apiService.getProducts();
-
-    _loading = false;
-    notifyListeners();
+  Future<List<Product>> getProducts() async {
+    final data = await rootBundle.loadString('assets/data/products.json');
+    final List jsonResult = json.decode(data);
+    return jsonResult.map((e) => Product.fromJson(e)).toList();
   }
 
-  /// filter by category
-  List<Product> byCategory(String categoryId) {
-    return _products
-        .where((p) => p.categoryId == categoryId)
-        .toList();
-  }
 }

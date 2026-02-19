@@ -1,83 +1,95 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../provider/product_provider.dart';
-import 'product_detail_screen.dart';
-import 'category_screen.dart';
+import '../../widgets/product_card.dart';
+import '../../widgets/category_chip.dart';
+import '../../widgets/bottom_nav_bar.dart';
+import '../../core/theme/app_colors.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() =>
-        Provider.of<ProductProvider>(context, listen: false)
-            .loadProducts());
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<ProductProvider>(context);
+    final productProvider = Provider.of<ProductProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Fresh Grocery"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.category),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const CategoryScreen()),
-              );
-            },
-          )
-        ],
-      ),
-
-      body: provider.isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : GridView.builder(
-              padding: const EdgeInsets.all(12),
-              itemCount: provider.products.length,
-              gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.72,
+      backgroundColor: const Color(0xFFF6F3EA),
+      bottomNavigationBar: const BottomNavBar(),
+      body: SafeArea(
+        child: Column(
+          children: [
+            /// 🔎 Header + Search
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(25),
+                ),
               ),
-              itemBuilder: (_, i) {
-                final product = provider.products[i];
-
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            ProductDetailScreen(product: product),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "សួស្តី!",
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    decoration: InputDecoration(
+                      hintText: "ស្វែងរក ផ្លែឈើ...",
+                      filled: true,
+                      fillColor: Colors.white,
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide.none,
                       ),
-                    );
-                  },
-                  child: Card(
-                    child: Column(
-                      children: [
-                        Image.network(product.imageUrl, height: 90),
-                        const SizedBox(height: 6),
-                        Text(product.name),
-                        Text("${product.price} ៛"),
-                        Text("⭐ ${product.rating}"),
-                      ],
                     ),
                   ),
-                );
-              },
+                ],
+              ),
             ),
+
+            const SizedBox(height: 15),
+
+            /// 🍎 Categories
+            SizedBox(
+              height: 60,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: productProvider.categories.length,
+                itemBuilder: (context, index) {
+                  final category = productProvider.categories[index];
+                  return CategoryChip(category: category);
+                },
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            /// 🥭 Product Grid
+            Expanded(
+              child: GridView.builder(
+                padding: const EdgeInsets.all(12),
+                itemCount: productProvider.products.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: .75,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                ),
+                itemBuilder: (context, index) {
+                  return ProductCard(
+                    product: productProvider.products[index],
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

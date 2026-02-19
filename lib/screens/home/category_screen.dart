@@ -1,32 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../provider/product_provider.dart';
+import '../../widgets/product_card.dart';
+import '../../core/theme/app_colors.dart';
 
 class CategoryScreen extends StatelessWidget {
-  const CategoryScreen({super.key});
+  final String categoryId;
+  final String title;
+
+  const CategoryScreen({
+    super.key,
+    required this.categoryId,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
-
-    final categories = [
-      {"id": "fruit", "name": "ផ្លែឈើ"},
-      {"id": "vegetable", "name": "បន្លែ"},
-      {"id": "meat", "name": "សាច់"},
-      {"id": "drink", "name": "ភេសជ្ជៈ"},
-    ];
+    final products = Provider.of<ProductProvider>(context)
+        .getProductsByCategory(categoryId);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Categories")),
-      body: ListView.builder(
-        itemCount: categories.length,
-        itemBuilder: (_, i) {
-          final cat = categories[i];
-
-          return ListTile(
-            leading: const Icon(Icons.category),
-            title: Text(cat["name"]!),
-            onTap: () {
-              Navigator.pop(context, cat["id"]);
-            },
-          );
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        title: Text(title),
+        backgroundColor: AppColors.primary,
+      ),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(12),
+        itemCount: products.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: .75,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+        ),
+        itemBuilder: (context, index) {
+          return ProductCard(product: products[index]);
         },
       ),
     );

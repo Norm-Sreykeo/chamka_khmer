@@ -6,107 +6,57 @@
     "imageUrl": "https://images.unsplash.com/photo-1547514701-42782101795e",
     "price": 6000,
     "rating": 4.8,
-    "unit": "គីឡូ",
-    "description": "ស្វាយទុំក្លិនក្រអូប ពិសេសសម្រាប់ទទួលទានផ្ទាល់។",
-    "stock": null
+    "description": "ស្វាយស្រស់ ផ្អែម ឆ្ងាញ់",
+    "isFavorite": false
   },
   {
     "id": "p2",
-    "name": "ផ្លែមៀន",
+    "name": "ផ្លែល្ហុង",
     "categoryId": "fruit",
-    "imageUrl": "https://images.unsplash.com/photo-1502741338009-cac2772e18bc",
-    "price": 8000,
-    "rating": 4.6,
-    "unit": "គីឡូ",
-    "description": "ផ្លែមៀនស្រស់ ជ្រើសរើសពីចម្ការដែលមានគុណភាព។",
-    "stock": null
+    "imageUrl": "https://images.unsplash.com/photo-1574226516831-e1dff420e37f",
+    "price": 3000,
+    "rating": 4.5,
+    "description": "ផ្លែល្ហុងផ្អែម សម្បូរវីតាមីន",
+    "isFavorite": false
   },
   {
     "id": "p3",
-    "name": "ល្ហុង",
+    "name": "ដ្រាហ្គនហ្វ្រូត",
     "categoryId": "fruit",
-    "imageUrl": "https://images.unsplash.com/photo-1501004318641-b39e6451bec6",
-    "price": 5500,
-    "rating": 4.5,
-    "unit": "គីឡូ",
-    "description": "ល្ហុងស្រស់សម្រាប់ធ្វើម្ហូប ឬទទួលទាន។",
-    "stock": null
+    "imageUrl": "https://images.unsplash.com/photo-1615486365587-aba2a8b6d0ab",
+    "price": 9000,
+    "rating": 4.7,
+    "description": "ផ្លែស្រស់ មានសារធាតុចិញ្ចឹមខ្ពស់",
+    "isFavorite": false
   },
   {
     "id": "p4",
-    "name": "ត្រសក់",
-    "categoryId": "vegetable",
-    "imageUrl": "https://images.unsplash.com/photo-1508747703725-719777637510",
-    "price": 3000,
-    "rating": 4.3,
-    "unit": "គីឡូ",
-    "description": "ត្រសក់ស្រស់ ងាយស្រួលធ្វើសាឡាដ។",
-    "stock": null
+    "name": "រំបូតាន",
+    "categoryId": "fruit",
+    "imageUrl": "https://images.unsplash.com/photo-1598515214211-89d3c6f8c8f5",
+    "price": 5000,
+    "rating": 4.6,
+    "description": "ផ្លែឈើមានរសជាតិផ្អែមឆ្ងាញ់",
+    "isFavorite": false
   },
   {
     "id": "p5",
-    "name": "ត្រប់",
-    "categoryId": "vegetable",
-    "imageUrl": "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a",
-    "price": 3500,
-    "rating": 4.3,
-    "unit": "គីឡូ",
-    "description": "ត្រប់ពណ៌ស្វាយ ស្រស់ និងមានរសជាតិឈ្ងុយ។",
-    "stock": null
+    "name": "ឪឡឹក",
+    "categoryId": "fruit",
+    "imageUrl": "https://images.unsplash.com/photo-1563114773-84221bd62daa",
+    "price": 6000,
+    "rating": 4.4,
+    "description": "ឪឡឹកត្រជាក់ ស្រស់ស្រាយ",
+    "isFavorite": false
   },
   {
     "id": "p6",
-    "name": "ស្លឹកក្រូច",
-    "categoryId": "herb",
-    "imageUrl": "https://images.unsplash.com/photo-1482012792084-a0c3725f289f",
-    "price": 2000,
-    "rating": 4.7,
-    "unit": "បាច់",
-    "description": "ស្លឹកក្រូចស្រស់ សម្រាប់បន្ថែមក្លិនឆ្ងាញ់។",
-    "stock": null
-  },
-  {
-    "id": "p7",
-    "name": "ខ្ទឹមស",
-    "categoryId": "dry",
-    "imageUrl": "https://images.unsplash.com/photo-1506806732259-39c2d0268443",
+    "name": "ចេក",
+    "categoryId": "fruit",
+    "imageUrl": "https://images.unsplash.com/photo-1574226516831-e1dff420e37f",
     "price": 4000,
     "rating": 4.5,
-    "unit": "គីឡូ",
-    "description": "ខ្ទឹមសស្ងួត សម្រាប់ម្ហូបប្រចាំថ្ងៃ។",
-    "stock": null
-  },
-  {
-    "id": "p8",
-    "name": "ស្វាយឆ្មា",
-    "categoryId": "mango",
-    "imageUrl": "https://images.unsplash.com/photo-1601001435828-419e309a2f53?w=400",
-    "price": 8000,
-    "rating": 4.8,
-    "unit": "គីឡូ",
-    "description": "ស្វាយឆ្មាស្រស់ ផ្អែមឆ្ងាញ់ ពីចម្ការខ្មែរ",
-    "stock": 45
-  },
-  {
-    "id": "p9",
-    "name": "ម្នាក់ផ្លែ",
-    "categoryId": "fruit",
-    "imageUrl": "https://images.unsplash.com/photo-1569591159212-b02ea8a9f239?w=400",
-    "price": 5000,
-    "rating": 4.5,
-    "unit": "គីឡូ",
-    "description": "ម្នាក់ផ្លែទុំឆ្ងាញ់ រសជាតិផ្អែម",
-    "stock": 120
-  },
-  {
-    "id": "p10",
-    "name": "ស្វាយក្រហម",
-    "categoryId": "mango",
-    "imageUrl": "https://images.unsplash.com/photo-1589924691995-400dc9ecc0af?w=400",
-    "price": 12000,
-    "rating": 4.9,
-    "unit": "គីឡូ",
-    "description": "ស្វាយក្រហមគុណភាពខ្ពស់ ផ្អែមខ្លាំង",
-    "stock": 28
+    "description": "ចេកផ្អែម មានថាមពលខ្ពស់",
+    "isFavorite": false
   }
 ]

@@ -10,7 +10,7 @@ class BackgroundWrapper extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/background.png'),
+          image: AssetImage('lib/assets/images/background.png'),
           fit: BoxFit.cover,
         ),
       ),
@@ -18,4 +18,3 @@ class BackgroundWrapper extends StatelessWidget {
     );
   }
 }
-

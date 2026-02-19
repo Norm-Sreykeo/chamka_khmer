@@ -25,7 +25,6 @@ class LoginScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 const SizedBox(height: 40),
 
                 const Text(
@@ -118,15 +117,11 @@ class LoginScreen extends StatelessWidget {
                       if (success) {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(
-                            builder: (_) => const HomeScreen(),
-                          ),
+                          MaterialPageRoute(builder: (_) => const HomeScreen()),
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Invalid credentials"),
-                          ),
+                          const SnackBar(content: Text("Invalid credentials")),
                         );
                       }
                     },

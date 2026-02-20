@@ -1,16 +1,58 @@
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class AuthService {
   // In-memory storage for mock users
-  static final List<Map<String, dynamic>> _mockUsers = [];
+  static List<Map<String, dynamic>> _mockUsers = [];
 
-  // Simulate current logged-in user (null = not logged in)
+  // Currently logged-in user
   static Map<String, dynamic>? _currentUser;
 
-  /// Get currently "logged in" user (for testing protected screens)
   Map<String, dynamic>? get currentUser => _currentUser;
 
-  /// Mock login – now sets currentUser on success
+  // --------------------------------------------------------------------------
+  // Initialization: load users and current user from storage
+  // --------------------------------------------------------------------------
+  static Future<void> initialize() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // Load saved users
+    final usersJson = prefs.getString('mockUsers');
+    if (usersJson != null) {
+      _mockUsers = List<Map<String, dynamic>>.from(
+        (json.decode(usersJson) as List<dynamic>),
+      );
+    }
+
+    // Load last logged-in user
+    final currentUserJson = prefs.getString('currentUser');
+    if (currentUserJson != null) {
+      _currentUser = Map<String, dynamic>.from(json.decode(currentUserJson));
+      print('Loaded logged-in user: ${_currentUser!['email']}');
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // Save current state to SharedPreferences
+  // --------------------------------------------------------------------------
+  static Future<void> _saveUsers() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('mockUsers', json.encode(_mockUsers));
+  }
+
+  static Future<void> _saveCurrentUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (_currentUser != null) {
+      await prefs.setString('currentUser', json.encode(_currentUser));
+    } else {
+      await prefs.remove('currentUser');
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // Login
+  // --------------------------------------------------------------------------
   Future<bool> login(String email, String password) async {
     await Future.delayed(const Duration(milliseconds: 800));
 
@@ -22,16 +64,19 @@ class AuthService {
     );
 
     if (user.isNotEmpty && user['password'] == password) {
-      _currentUser = Map.from(user)..remove('password'); // don't store password in session
-      print('Mock login SUCCESS: $normalizedEmail → ${_currentUser!['fullName']}');
+      _currentUser = Map.from(user)..remove('password');
+      await _saveCurrentUser();
+      print('Login SUCCESS: $normalizedEmail → ${_currentUser!['fullName']}');
       return true;
     }
 
-    print('Mock login FAILED: $normalizedEmail - invalid credentials');
+    print('Login FAILED: $normalizedEmail - invalid credentials');
     return false;
   }
 
-  /// Mock register
+  // --------------------------------------------------------------------------
+  // Register
+  // --------------------------------------------------------------------------
   Future<bool> register({
     required String email,
     required String password,
@@ -46,73 +91,72 @@ class AuthService {
         password.isEmpty ||
         fullName.trim().isEmpty ||
         phone.trim().isEmpty) {
-      print('Mock register FAILED: missing required fields');
+      print('Register FAILED: missing required fields');
       return false;
     }
 
-    final emailExists = _mockUsers.any(
-      (u) => u['email'] == normalizedEmail,
-    );
+    final emailExists = _mockUsers.any((u) => u['email'] == normalizedEmail);
 
     if (emailExists) {
-      print('Mock register FAILED: email already in use → $normalizedEmail');
+      print('Register FAILED: email already in use → $normalizedEmail');
       return false;
     }
 
     final newUser = {
       'email': normalizedEmail,
-      'password': password, // plain text – ONLY for mock/testing!
+      'password': password, // only for mock
       'fullName': fullName.trim(),
       'phone': phone.trim(),
       'createdAt': DateTime.now().toIso8601String(),
     };
 
     _mockUsers.add(newUser);
-    print('Mock register SUCCESS: $normalizedEmail | $fullName | $phone');
+    await _saveUsers();
 
-    // Optional: auto-login after register (common UX pattern)
-    // _currentUser = Map.from(newUser)..remove('password');
+    // Auto-login after registration
+    _currentUser = Map.from(newUser)..remove('password');
+    await _saveCurrentUser();
 
+    print('Register SUCCESS: $normalizedEmail | $fullName | $phone');
     return true;
   }
 
-  /// Mock password reset
+  // --------------------------------------------------------------------------
+  // Password reset
+  // --------------------------------------------------------------------------
   Future<bool> resetPassword(String email) async {
     await Future.delayed(const Duration(milliseconds: 1200));
-
     final normalizedEmail = email.trim().toLowerCase();
 
-    final userExists = _mockUsers.any(
-      (u) => u['email'] == normalizedEmail,
-    );
+    final userExists = _mockUsers.any((u) => u['email'] == normalizedEmail);
 
     if (!userExists) {
-      print('Mock reset FAILED: email not found → $normalizedEmail');
+      print('Reset FAILED: email not found → $normalizedEmail');
       return false;
     }
 
-    print('Mock reset link "sent" to: $normalizedEmail');
-    // In real app: send actual email
-    // Here we just pretend it worked
+    print('Reset link "sent" to: $normalizedEmail');
     return true;
   }
 
-  /// Mock logout
+  // --------------------------------------------------------------------------
+  // Logout
+  // --------------------------------------------------------------------------
   Future<void> logout() async {
-    await Future.delayed(const Duration(milliseconds: 400));
-    final wasLoggedIn = _currentUser != null;
     _currentUser = null;
-    print('Mock logout performed${wasLoggedIn ? " (user was logged in)" : ""}');
+    await _saveCurrentUser();
+    print('User logged out');
   }
 
   // --------------------------------------------------------------------------
-  // Debugging helper – call from anywhere (e.g. debug button)
+  // Debug
   // --------------------------------------------------------------------------
   static void debugPrintUsers() {
     if (_mockUsers.isEmpty) {
-      print('No mock users registered yet.');
+      print('No users registered yet.');
       return;
     }
+
     print('=== Mock Users (${_mockUsers.length}) ===');
     for (var u in _mockUsers) {
       print(' • ${u['email']} | ${u['fullName']} | ${u['phone']}');
@@ -121,10 +165,12 @@ class AuthService {
     print('========================');
   }
 
-  // Clear everything (useful for testing / hot restart)
-  static void debugClearAll() {
+  static Future<void> debugClearAll() async {
     _mockUsers.clear();
     _currentUser = null;
-    print('Mock AuthService cleared');
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('mockUsers');
+    await prefs.remove('currentUser');
+    print('AuthService cleared');
   }
 }

@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // theme: AppTheme.lightTheme,
+      theme: AppTheme.lightTheme,
       initialRoute: AppRoutes.onboarding,
       routes: AppRoutes.routes,
     );

@@ -7,15 +7,27 @@ import 'provider/product_provider.dart';
 import 'app.dart';
 
 void main() {
-  runApp(
-    MultiProvider(
+  runApp(const AppProviders());
+}
+
+class AppProviders extends StatelessWidget {
+  const AppProviders({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => ProductProvider()..loadProducts()),
+
+        ChangeNotifierProvider(
+          create: (_) => ProductProvider()..loadData(),
+        ),
+
         ChangeNotifierProvider(create: (_) => CartProvider()),
+
         ChangeNotifierProvider(create: (_) => OrderProvider()),
       ],
       child: const MyApp(),
-    ),
-  );
+    );
+  }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../models/category.dart';
+import '../models/category.dart' as model;
 import '../screens/home/category_screen.dart';
 import '../core/theme/app_colors.dart';
 
 class CategoryChip extends StatelessWidget {
-  final Category category;
+  final model.Category category;
 
   const CategoryChip({super.key, required this.category});
 

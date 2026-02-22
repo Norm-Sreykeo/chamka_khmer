@@ -1,6 +1,6 @@
 [
-  { "id": "fruit", "name": "ផ្លែឈើ" },
-  { "id": "vegetable", "name": "បន្លែ" },
-  { "id": "drink", "name": "ភេសជ្ជៈ" },
-  { "id": "snack", "name": "អាហារសម្រន់" }
+  {"id":"fruit","name":"ផ្លែឈើ","iconAsset":"lib/assets/icons/1.png"},
+  {"id":"vegetable","name":"បន្លែ","iconAsset":"lib/assets/icons/2.png"},
+  {"id":"leafy","name":"ស្លឹក","iconAsset":"lib/assets/icons/3.png"},
+  {"id":"root","name":"បន្លែឫស","iconAsset":"lib/assets/icons/4.png"}
 ]

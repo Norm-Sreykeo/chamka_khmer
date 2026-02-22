@@ -30,7 +30,6 @@ class ProductProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  /// filter by category
   List<Product> getProductsByCategory(String categoryId) {
     return _products
         .where((p) => p.categoryId == categoryId)

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'provider/auth_provider.dart';
-import 'provider/cart_provider.dart';
-import 'provider/order_provider.dart';
-import 'provider/product_provider.dart';
+import 'providers/auth_provider.dart';
+import 'providers/cart_provider.dart';
+import 'providers/order_provider.dart';
+import 'providers/product_provider.dart';
+import 'services/auth_service.dart';
 import 'app.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Initialize AuthService to load any existing user session
+  await AuthService.initialize();
   runApp(const AppProviders());
 }
 
@@ -19,9 +23,7 @@ class AppProviders extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
 
-        ChangeNotifierProvider(
-          create: (_) => ProductProvider()..loadData(),
-        ),
+        ChangeNotifierProvider(create: (_) => ProductProvider()..loadData()),
 
         ChangeNotifierProvider(create: (_) => CartProvider()),
 

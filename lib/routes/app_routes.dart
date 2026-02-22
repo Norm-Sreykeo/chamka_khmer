@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../screens/opening/splash_screen.dart';
 import '../screens/opening/onboarding_screen.dart';
 import '../screens/auth/login_screen.dart';
-import '../screens/home/home_screen.dart';
+import '../screens/main_screen.dart';
 import '../screens/cart/cart_screen.dart';
 
 class AppRoutes {
@@ -16,7 +16,7 @@ class AppRoutes {
     splash: (_) => const SplashScreen(),
     onboarding: (_) => const OnboardingScreen(),
     login: (_) => const LoginScreen(),
-    home: (_) => const HomeScreen(),
+    home: (_) => const MainScreen(),
     cart: (_) => const CartScreen(),
   };
 }

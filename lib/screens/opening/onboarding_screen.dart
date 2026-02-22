@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../auth/login_screen.dart';
+import '../main_screen.dart';
+import '../../services/auth_service.dart';
 import '../../widgets/background_wrapper.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -11,7 +13,23 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _controller = PageController();
+  final AuthService _auth = AuthService();
   int currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _redirectIfAlreadyLoggedIn());
+  }
+
+  void _redirectIfAlreadyLoggedIn() {
+    if (_auth.currentUser != null && mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const MainScreen()),
+      );
+    }
+  }
 
   final List<Map<String, String>> pages = [
     {

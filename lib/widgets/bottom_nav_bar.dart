@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import '../core/theme/app_colors.dart';
 
-class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({super.key});
+class BottomNavBar extends StatelessWidget {
+  final int currentIndex;
+  final ValueChanged<int> onTap;
 
-  @override
-  State<BottomNavBar> createState() => _BottomNavBarState();
-}
+  const BottomNavBar({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+  });
 
-class _BottomNavBarState extends State<BottomNavBar> {
-  int index = 0;
+  static const List<String> _labels = [
+    "ទំព័រដើម",
+    "ប្រភេទ",
+    "កន្ត្រក",
+    "គណនី",
+  ];
 
-  final icons = const [
+  static const List<IconData> _icons = [
     Icons.home,
     Icons.grid_view,
     Icons.shopping_cart,
@@ -20,18 +27,25 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: index,
-      selectedItemColor: AppColors.primary,
-      unselectedItemColor: Colors.grey,
-      type: BottomNavigationBarType.fixed,
-      onTap: (i) => setState(() => index = i),
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-        BottomNavigationBarItem(icon: Icon(Icons.grid_view), label: "Category"),
-        BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Account"),
-      ],
+    return Container(
+      decoration: const BoxDecoration(
+        color: AppColors.navBarBackground,
+      ),
+      child: BottomNavigationBar(
+        currentIndex: currentIndex,
+        backgroundColor: AppColors.navBarBackground,
+        selectedItemColor: AppColors.primary,
+        unselectedItemColor: Colors.grey.shade400,
+        type: BottomNavigationBarType.fixed,
+        onTap: onTap,
+        items: List.generate(
+        _labels.length,
+        (i) => BottomNavigationBarItem(
+          icon: Icon(_icons[i]),
+          label: _labels[i],
+        ),
+      ),
+      ),
     );
   }
 }

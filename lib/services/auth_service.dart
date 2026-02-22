@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class AuthService {
   // In-memory storage for mock users
@@ -8,6 +10,9 @@ class AuthService {
 
   // Currently logged-in user
   static Map<String, dynamic>? _currentUser;
+
+  // Social login instances
+  static final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   Map<String, dynamic>? get currentUser => _currentUser;
 
@@ -145,7 +150,100 @@ class AuthService {
   Future<void> logout() async {
     _currentUser = null;
     await _saveCurrentUser();
+    await _googleSignIn.signOut();
+    await FacebookAuth.instance.logOut();
     print('User logged out');
+  }
+
+  // --------------------------------------------------------------------------
+  // Google Sign-In
+  // --------------------------------------------------------------------------
+  Future<bool> signInWithGoogle() async {
+    try {
+      print('Starting Google Sign-In...');
+
+      // If user is already signed in, sign them out first
+      if (await _googleSignIn.isSignedIn()) {
+        print('User already signed in, signing out first...');
+        await _googleSignIn.signOut();
+      }
+
+      print('Attempting to sign in with Google...');
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+      if (googleUser == null) {
+        print('Google Sign-In cancelled by user');
+        return false;
+      }
+
+      print('Google Sign-In successful for: ${googleUser.email}');
+
+      // Create user data from Google account
+      _currentUser = {
+        'email': googleUser.email,
+        'fullName': googleUser.displayName ?? 'Google User',
+        'phone': '',
+        'photoUrl': googleUser.photoUrl,
+        'loginMethod': 'google',
+        'createdAt': DateTime.now().toIso8601String(),
+      };
+
+      await _saveCurrentUser();
+      print(
+        'Google Sign-In SUCCESS: ${_currentUser!['email']} → ${_currentUser!['fullName']}',
+      );
+      return true;
+    } catch (e) {
+      print('Google Sign-In ERROR: $e');
+      print('Stack trace: ${StackTrace.current}');
+      return false;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // Facebook Sign-In
+  // --------------------------------------------------------------------------
+  Future<bool> signInWithFacebook() async {
+    try {
+      print('Starting Facebook Sign-In...');
+
+      final LoginResult result = await FacebookAuth.instance.login();
+
+      if (result.status == LoginStatus.cancelled) {
+        print('Facebook Sign-In cancelled by user');
+        return false;
+      }
+
+      if (result.status != LoginStatus.success) {
+        print('Facebook Sign-In failed: ${result.message}');
+        return false;
+      }
+
+      print('Facebook Sign-In successful, getting user data...');
+      final userData = await FacebookAuth.instance.getUserData();
+
+      print('Facebook user data received: ${userData['name']}');
+
+      // Create user data from Facebook account
+      _currentUser = {
+        'email': userData['email'] ?? '',
+        'fullName': userData['name'] ?? 'Facebook User',
+        'phone': '',
+        'photoUrl': userData['picture']['data']['url'] ?? '',
+        'loginMethod': 'facebook',
+        'createdAt': DateTime.now().toIso8601String(),
+      };
+
+      await _saveCurrentUser();
+      print(
+        'Facebook Sign-In SUCCESS: ${_currentUser!['email']} → ${_currentUser!['fullName']}',
+      );
+      return true;
+    } catch (e) {
+      print('Facebook Sign-In ERROR: $e');
+      print('Stack trace: ${StackTrace.current}');
+      return false;
+    }
   }
 
   // --------------------------------------------------------------------------

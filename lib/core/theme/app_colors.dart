@@ -13,7 +13,7 @@ class AppColors {
   static const Color surface = Colors.white;
 
   /// Text colors
-  static const Color textPrimary = Color(0xFF2C3E50);
+  static const Color textPrimary = Color(0xFF8F653A);
   static const Color textSecondary = Color(0xFF757575);
 
   /// Accent colors
@@ -24,11 +24,11 @@ class AppColors {
   static const Color error = Color(0xFFE53935);
 
   /// Borders
-  static const Color border = Color(0xFFE0E0E0);
+  static const Color border = Color.fromARGB(255, 192, 192, 192);
 
   /// Shadow
   static const Color shadow = Color(0x14000000);
 
   /// Bottom navigation bar (Figma: dark grey)
-  static const Color navBarBackground = Color(0xFF2C3E50);
+  static const Color navBarBackground = Color.fromARGB(255, 243, 255, 240);
 }

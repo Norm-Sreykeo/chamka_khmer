@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 children: [
                   /// Spacer for header and search bar
-                  const SizedBox(height: 150),
+                  const SizedBox(height: 180),
 
                   /// Banner: light beige, leaf icons, centered text
                   Padding(
@@ -31,12 +31,13 @@ class HomeScreen extends StatelessWidget {
                     child: Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(
-                        vertical: 14,
-                        horizontal: 20,
+                        vertical: 8,
+                        horizontal: 15,
                       ),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF5F0E6),
-                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: const Color.fromARGB(255, 254, 167, 74), width: 1),
+                        borderRadius: BorderRadius.circular(18),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.04),
@@ -51,7 +52,7 @@ class HomeScreen extends StatelessWidget {
                           Icon(
                             Icons.eco,
                             color: AppColors.primary.withValues(alpha: 0.85),
-                            size: 55,
+                            size: 35,
 
                           ),
                           const SizedBox(width: 10),
@@ -248,7 +249,7 @@ class HomeScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           hintText: "ស្វែងផ្លែឈើ និង បន្លែ",
                           hintStyle: TextStyle(
-                            color: Colors.grey.shade600,
+                            color: AppColors.textPrimary.withValues(alpha: 0.6),
                             fontSize: 14,
                           ),
                           filled: true,

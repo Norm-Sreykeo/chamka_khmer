@@ -30,6 +30,7 @@ class BottomNavBar extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.navBarBackground,
+        border: Border(top: BorderSide(color: AppColors.border)),
       ),
       child: BottomNavigationBar(
         currentIndex: currentIndex,

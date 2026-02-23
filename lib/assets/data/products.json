@@ -4,7 +4,7 @@
     "name": "ស្វាយ",
     "categoryId": "fruit",
     "imageUrl": "https://images.unsplash.com/photo-1547514701-42782101795e",
-    "price": 6000,
+    "price": 5000,
     "rating": 4.8,
     "description": "ស្វាយស្រស់ ផ្អែម ឆ្ងាញ់",
     "isFavorite": false
@@ -13,7 +13,7 @@
     "id": "p2",
     "name": "ផ្លែល្ហុង",
     "categoryId": "fruit",
-    "imageUrl": "lib/asseets/images/1.jpg",
+    "imageUrl": "assets/images/papaya.jpg",
     "price": 3000,
     "rating": 4.5,
     "description": "ផ្លែល្ហុងផ្អែម សម្បូរវីតាមីន",
@@ -23,7 +23,7 @@
     "id": "p3",
     "name": "ដ្រាហ្គនហ្វ្រូត",
     "categoryId": "fruit",
-    "imageUrl":  "lib/asseets/images/1.jpg",
+    "imageUrl":  "assets/images/dragonfruit.jpg",
     "price": 9000,
     "rating": 4.7,
     "description": "ផ្លែស្រស់ មានសារធាតុចិញ្ចឹមខ្ពស់",
@@ -33,7 +33,7 @@
     "id": "p4",
     "name": "រំបូតាន",
     "categoryId": "fruit",
-    "imageUrl": "lib/assets/images/1.jpg",
+    "imageUrl": "assets/images/rambutan-ftr.jpg",
     "price": 5000,
     "rating": 4.6,
     "description": "ផ្លែឈើមានរសជាតិផ្អែមឆ្ងាញ់",
@@ -53,10 +53,216 @@
     "id": "p6",
     "name": "ចេក",
     "categoryId": "fruit",
-    "imageUrl": "lib/assets/images/1.jpg",
+    "imageUrl": "assets/images/banana.jpg",
     "price": 4000,
     "rating": 4.5,
     "description": "ចេកផ្អែម មានថាមពលខ្ពស់",
     "isFavorite": false
+  },
+  {
+    "id": "p7",
+    "name": "មាន",
+    "categoryId": "fruit",
+    "imageUrl": "assets/images/longanfruit.jpg",
+    "price": 5000,
+    "rating": 4.5,
+    "description": "ផ្អែម ទឹកច្រើន ស្រស់",
+    "isFavorite": false
+  }, 
+  {
+    "id": "p8",
+    "name": "ទៀប",
+    "categoryId": "fruit",
+    "imageUrl": "assets/images/teb.jpg",
+    "price": 5000,
+    "rating": 4.5,
+    "description": "​រសជាតិ​ផ្អែម​ជាប់​មាត់ ​ស្រស់",
+    "isFavorite": false
+  },
+  {
+    "id": "p9",
+    "name": "ខ្នុរ",
+    "categoryId": "fruit",
+    "imageUrl": "assets/images/Jackfruit.jpg",
+    "price": 7000,
+    "rating": 4.7,
+    "description": "ផ្អែមខ្លាំង ក្លិនឈ្ងុយ",
+    "isFavorite": false
+  },
+  {
+    "id": "p10",
+    "name": "ជម្ពូរ",
+    "categoryId": "fruit",
+    "imageUrl": "assets/images/wax-apple-fruit-1152x1536.jpg",
+    "price": 7000,
+    "rating": 4.7,
+    "description": "ផ្អែមស្រាល ស្រួយ ទឹកច្រើន",
+    "isFavorite": false
+  },
+  {
+    "id": "p11",
+    "name": "ឆៃថាវ",
+    "categoryId": "root",
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjC0icfyAjvg2OYhUEYV4-_MPYnotN0Mic0Q&s",
+    "price": 5000,
+    "rating": 4.6,
+    "description": "ឆៃថាវ ស្រស់ ខ្ចី សម្រាប់ស៊ុប និងឆា",
+    "isFavorite": false
+  },
+  [
+  {
+    "id": "p12",
+    "name": "ត្រសក់",
+    "categoryId": "vegetable",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/96/Cucumber.jpg",
+    "price": 3000,
+    "rating": 4.5,
+    "description": "ត្រសក់ ស្រស់ ត្រជាក់ ឆ្ងាញ់",
+    "isFavorite": false
+  },
+  {
+    "id": "p13",
+    "name": "ប៉េងប៉ោះ",
+    "categoryId": "vegetable",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/88/Bright_red_tomato_and_cross_section02.jpg",
+    "price": 4000,
+    "rating": 4.7,
+    "description": "ប៉េងប៉ោះ ផ្អែមបន្តិច ជូរបន្តិច",
+    "isFavorite": false
+  },
+  {
+    "id": "p14",
+    "name": "ត្រប់វែង",
+    "categoryId": "vegetable",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Eggplant.jpg",
+    "price": 3500,
+    "rating": 4.3,
+    "description": "ត្រប់វែង ទន់ ងាយចម្អិន",
+    "isFavorite": false
+  },
+  {
+    "id": "p15",
+    "name": "ម្ទេស",
+    "categoryId": "vegetable",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Red_chili_peppers.jpg",
+    "price": 2000,
+    "rating": 4.6,
+    "description": "ម្ទេស ហឹរ បង្កើនរសជាតិម្ហូប",
+    "isFavorite": false
+  },
+  {
+    "id": "p16",
+    "name": "ខ្ទឹមបារាំង",
+    "categoryId": "vegetable",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/25/Onions.jpg",
+    "price": 4500,
+    "rating": 4.4,
+    "description": "ខ្ទឹមបារាំង ក្លិនឈ្ងុយ ឆ្ងាញ់",
+    "isFavorite": false
+  },
+
+  {
+    "id": "p17",
+    "name": "ស្ពៃក្តោប",
+    "categoryId": "leafy",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Cabbage_and_cross_section_on_white.jpg",
+    "price": 2500,
+    "rating": 4.6,
+    "description": "ស្ពៃក្តោប ស្រស់ ខ្ចី ឆ្ងាញ់",
+    "isFavorite": false
+  },
+  {
+    "id": "p18",
+    "name": "ស្ពៃខ្មៅ",
+    "categoryId": "leafy",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/02/Spinach_leaves.jpg",
+    "price": 3000,
+    "rating": 4.7,
+    "description": "ស្ពៃខ្មៅ សំបូរវីតាមីន",
+    "isFavorite": false
+  },
+  {
+    "id": "p19",
+    "name": "កន្ទួត",
+    "categoryId": "leafy",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Lettuce_Mignonette.jpg",
+    "price": 2800,
+    "rating": 4.5,
+    "description": "កន្ទួត ខ្ចី ស្រស់ សម្រាប់សាឡាដ",
+    "isFavorite": false
+  },
+  {
+    "id": "p20",
+    "name": "ត្រកួន",
+    "categoryId": "leafy",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Water_spinach.jpg",
+    "price": 2000,
+    "rating": 4.8,
+    "description": "ត្រកួន ស្រស់ ឆ្ងាញ់ សម្រាប់ឆា",
+    "isFavorite": false
+  },
+  {
+    "id": "p21",
+    "name": "ស្លឹកខ្ទឹម",
+    "categoryId": "leafy",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Scallions.jpg",
+    "price": 1500,
+    "rating": 4.4,
+    "description": "ស្លឹកខ្ទឹម ក្លិនឈ្ងុយ សម្រាប់តុបតែងម្ហូប",
+    "isFavorite": false
+  },
+
+  {
+    "id": "p22",
+    "name": "ការ៉ុត",
+    "categoryId": "root",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7e/Carrots.jpg",
+    "price": 3500,
+    "rating": 4.9,
+    "description": "ការ៉ុត ផ្អែម ខ្ចី សំបូរវីតាមីន A",
+    "isFavorite": false
+  },
+  {
+    "id": "p23",
+    "name": "ដំឡូងបារាំង",
+    "categoryId": "root",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg",
+    "price": 4000,
+    "rating": 4.7,
+    "description": "ដំឡូងបារាំង ទន់ ងាយចម្អិន",
+    "isFavorite": false
+  },
+  {
+    "id": "p24",
+    "name": "ដំឡូងមី",
+    "categoryId": "root",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Cassava.jpg",
+    "price": 3000,
+    "rating": 4.3,
+    "description": "ដំឡូងមី ផ្អែម សម្រាប់ចម្អិនម្ហូប",
+    "isFavorite": false
+  },
+  {
+    "id": "p25",
+    "name": "ខ្ទឹមស",
+    "categoryId": "root",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Garlic.jpg",
+    "price": 4500,
+    "rating": 4.8,
+    "description": "ខ្ទឹមស ក្លិនខ្លាំង បង្កើនរសជាតិម្ហូប",
+    "isFavorite": false
+  },
+  {
+    "id": "p26",
+    "name": "ឫសខ្ញី",
+    "categoryId": "root",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Ginger.jpg",
+    "price": 5000,
+    "rating": 4.6,
+    "description": "ឫសខ្ញី ក្តៅ ឆ្ងាញ់ សម្រាប់ម្ហូប និងភេសជ្ជៈ",
+    "isFavorite": false
   }
+]
+
+
 ]

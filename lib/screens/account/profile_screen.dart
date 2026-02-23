@@ -15,6 +15,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = AuthService();
+    
     final email = auth.currentUser?['email'] ?? 'customer@chamkar.kh';
 
     return Scaffold(

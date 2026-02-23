@@ -6,7 +6,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class AuthService {
   // In-memory storage for mock users
-  static List<Map<String, dynamic>> _mockUsers = [
+  static List<Map <String, dynamic>> _mockUsers = [
   {
     'email': 'admin@gmail.com',
     'password': '123456',

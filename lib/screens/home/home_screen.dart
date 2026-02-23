@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 children: [
                   /// Spacer for header and search bar
-                  const SizedBox(height: 120),
+                  const SizedBox(height: 150),
 
                   /// Banner: light beige, leaf icons, centered text
                   Padding(
@@ -50,7 +50,8 @@ class HomeScreen extends StatelessWidget {
                           Icon(
                             Icons.eco,
                             color: AppColors.primary.withValues(alpha: 0.85),
-                            size: 22,
+                            size: 55,
+
                           ),
                           const SizedBox(width: 10),
                           const Text(
@@ -164,7 +165,7 @@ class HomeScreen extends StatelessWidget {
                   /// Curved bottom that will be overlapped by the search bar.
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
+                    padding: const EdgeInsets.fromLTRB(16,28, 16,64),
                     decoration: BoxDecoration(
                       color: AppColors.primary,
                       borderRadius: const BorderRadius.vertical(
@@ -228,13 +229,16 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ],
                     ),
+
+                    
                   ),
+                  const SizedBox(height: 20),
 
                   /// Search bar overlapping the header's bottom curve
                   Positioned(
                     left: 16,
                     right: 16,
-                    bottom: -24,
+                    bottom: 5,
                     child: Material(
                       elevation: 4,
                       shadowColor: Colors.black26,

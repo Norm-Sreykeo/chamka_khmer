@@ -11,12 +11,7 @@ class BottomNavBar extends StatelessWidget {
     required this.onTap,
   });
 
-  static const List<String> _labels = [
-    "ទំព័រដើម",
-    "ប្រភេទ",
-    "កន្ត្រក",
-    "គណនី",
-  ];
+  static const List<String> _labels = ["ទំព័រដើម", "ប្រភេទ", "កន្ត្រក", "គណនី"];
 
   static const List<IconData> _icons = [
     Icons.home,
@@ -25,12 +20,41 @@ class BottomNavBar extends StatelessWidget {
     Icons.person,
   ];
 
+  BottomNavigationBarItem _item(int index) {
+    final icon = _icons[index];
+    return BottomNavigationBarItem(
+      icon: Padding(
+        padding: const EdgeInsets.only(top: 6),
+        child: Icon(icon, size: 24),
+      ),
+      activeIcon: Padding(
+        padding: const EdgeInsets.only(top: 6),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: AppColors.primary.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Icon(icon, size: 24, color: AppColors.primary),
+        ),
+      ),
+      label: _labels[index],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.navBarBackground,
-        border: Border(top: BorderSide(color: AppColors.border)),
+        border: const Border(top: BorderSide(color: AppColors.border)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -2),
+          ),
+        ],
       ),
       child: BottomNavigationBar(
         currentIndex: currentIndex,
@@ -38,14 +62,14 @@ class BottomNavBar extends StatelessWidget {
         selectedItemColor: AppColors.primary,
         unselectedItemColor: Colors.grey.shade400,
         type: BottomNavigationBarType.fixed,
+        elevation: 0,
+        selectedFontSize: 11,
+        unselectedFontSize: 11,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w700),
+        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
+        showUnselectedLabels: true,
         onTap: onTap,
-        items: List.generate(
-        _labels.length,
-        (i) => BottomNavigationBarItem(
-          icon: Icon(_icons[i]),
-          label: _labels[i],
-        ),
-      ),
+        items: List.generate(_labels.length, _item),
       ),
     );
   }

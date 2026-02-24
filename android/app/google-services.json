@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "585828674142",
+    "project_id": "chamka-khmer-8eb3b",
+    "storage_bucket": "chamka-khmer-8eb3b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585828674142:android:773d05f2473bacf20722cf",
+        "android_client_info": {
+          "package_name": "com.example.chamka_khmer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_5w4hVBotfaaV43hZj4XC6UpgDYZacQs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -164,6 +164,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           children: [
                             ChoiceChip(
                               label: const Text('ផ្លែឈើ'),
+                              showCheckmark: false,
                               selected: _selectedSubCategory == null,
                               onSelected: (_) {
                                 Navigator.of(context).pushReplacement(
@@ -179,6 +180,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             const SizedBox(width: 10),
                             ChoiceChip(
                               label: const Text('ផ្លែឈើផ្អែម'),
+                              showCheckmark: false,
                               selected: _selectedSubCategory == 'sweet',
                               onSelected: (_) {
                                 setState(() => _selectedSubCategory = 'sweet');
@@ -196,6 +198,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             const SizedBox(width: 10),
                             ChoiceChip(
                               label: const Text('ផ្លែឈើជូរ'),
+                              showCheckmark: false,
                               selected: _selectedSubCategory == 'sour',
                               onSelected: (_) {
                                 setState(() => _selectedSubCategory = 'sour');
@@ -213,6 +216,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             const SizedBox(width: 10),
                             ChoiceChip(
                               label: const Text('ផ្លែឈើមានទឹក'),
+                              showCheckmark: false,
                               selected: _selectedSubCategory == 'juicy',
                               onSelected: (_) {
                                 setState(() => _selectedSubCategory = 'juicy');
@@ -562,7 +566,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ],
                 ),
               ),
-              ElevatedButton.icon(
+              ElevatedButton(
                 onPressed: () {
                   debugPrint(
                     'ProductDetail.addPressed: ${product.id}, qty=$qty',
@@ -647,11 +651,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24),
                   ),
+                  visualDensity: VisualDensity.compact,
                 ),
-                icon: const Icon(Icons.shopping_cart_outlined, size: 20),
-                label: const Text(
-                  "បន្ថែមទៅកន្ត្រក",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.shopping_cart_outlined, size: 20),
+                    SizedBox(width: 8),
+                    Text(
+                      "បន្ថែមទៅកន្ត្រក",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

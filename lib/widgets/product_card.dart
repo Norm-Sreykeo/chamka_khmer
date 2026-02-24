@@ -128,7 +128,7 @@ class ProductCard extends StatelessWidget {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {},
-                  child: ElevatedButton.icon(
+                  child: ElevatedButton(
                     onPressed: () {
                       debugPrint('ProductCard.addPressed: ${product.id}');
                       goToDetail();
@@ -145,14 +145,21 @@ class ProductCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       elevation: 0,
+                      visualDensity: VisualDensity.compact,
                     ),
-                    icon: const Icon(Icons.shopping_cart_outlined, size: 18),
-                    label: const Text(
-                      "បន្ថែម",
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                      ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.shopping_cart_outlined, size: 18),
+                        SizedBox(width: 6),
+                        Text(
+                          "បន្ថែម",
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

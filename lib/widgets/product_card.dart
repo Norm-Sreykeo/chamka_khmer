@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'dart:convert';
+import 'dart:typed_data';
 import '../models/product.dart';
-import '../providers/cart_provider.dart';
 import '../screens/home/product_detail_screen.dart';
 import '../core/theme/app_colors.dart';
 import '../core/utils/helpers.dart';
@@ -13,45 +13,88 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => ProductDetailScreen(product: product),
+    void goToDetail() {
+      debugPrint('ProductCard.goToDetail: ${product.id}');
+      Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute(
+          builder: (_) => ProductDetailScreen(product: product),
+        ),
+      );
+    }
+
+    final String imageUrl = product.imageUrl;
+    final bool isNetworkImage = imageUrl.startsWith('http');
+    final bool isDataImage = imageUrl.startsWith('data:image');
+    final String assetPath = imageUrl.startsWith('lib/')
+        ? imageUrl
+        : 'lib/$imageUrl';
+
+    Widget buildImage() {
+      if (isDataImage) {
+        final int commaIndex = imageUrl.indexOf(',');
+        final String base64Data = commaIndex >= 0
+            ? imageUrl.substring(commaIndex + 1)
+            : '';
+        try {
+          final Uint8List bytes = base64Decode(base64Data);
+          return Image.memory(bytes, width: double.infinity, fit: BoxFit.cover);
+        } catch (_) {
+          return const ColoredBox(
+            color: Color(0xFFEFEFEF),
+            child: Center(
+              child: Icon(Icons.broken_image_outlined, color: Colors.grey),
+            ),
+          );
+        }
+      }
+
+      if (isNetworkImage) {
+        return Image.network(
+          imageUrl,
+          width: double.infinity,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => const ColoredBox(
+            color: Color(0xFFEFEFEF),
+            child: Center(
+              child: Icon(Icons.broken_image_outlined, color: Colors.grey),
+            ),
           ),
         );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 6,
-              color: Colors.black.withValues(alpha: 0.05),
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
+      }
+
+      return Image.asset(assetPath, width: double.infinity, fit: BoxFit.cover);
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 6,
+            color: Colors.black.withValues(alpha: 0.05),
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InkWell(
+              onTap: goToDetail,
+              borderRadius: BorderRadius.circular(14),
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(14),
-                child: AspectRatio(
-                  aspectRatio: 1.35,
-                  child: Image.network(
-                    product.imageUrl,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                child: AspectRatio(aspectRatio: 1.35, child: buildImage()),
               ),
-              const SizedBox(height: 8),
-              Text(
+            ),
+            const SizedBox(height: 8),
+            InkWell(
+              onTap: goToDetail,
+              borderRadius: BorderRadius.circular(8),
+              child: Text(
                 product.name,
                 style: const TextStyle(
                   fontWeight: FontWeight.w700,
@@ -61,10 +104,14 @@ class ProductCard extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 6),
-              Row(
-                children: [
-                  Expanded(
+            ),
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: goToDetail,
+                    borderRadius: BorderRadius.circular(8),
                     child: Text(
                       "${formatPriceRiel(product.price)}/1kg",
                       style: const TextStyle(
@@ -76,19 +123,15 @@ class ProductCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  ElevatedButton.icon(
+                ),
+                const SizedBox(width: 8),
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {},
+                  child: ElevatedButton.icon(
                     onPressed: () {
-                      context.read<CartProvider>().addToCart(product);
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            "បានបន្ថែម ${product.name} ទៅក្នុងកន្ត្រក",
-                          ),
-                          duration: const Duration(seconds: 1),
-                        ),
-                      );
+                      debugPrint('ProductCard.addPressed: ${product.id}');
+                      goToDetail();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
@@ -112,10 +155,10 @@ class ProductCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

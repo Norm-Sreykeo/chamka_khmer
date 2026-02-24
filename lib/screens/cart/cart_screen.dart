@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
+import 'dart:typed_data';
 import '../../providers/cart_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/helpers.dart';
@@ -54,6 +56,71 @@ class CartScreen extends StatelessWidget {
                     itemCount: items.length,
                     itemBuilder: (_, i) {
                       final item = items[i];
+                      final String imageUrl = item.product.imageUrl;
+                      final bool isNetworkImage = imageUrl.startsWith('http');
+                      final bool isDataImage = imageUrl.startsWith(
+                        'data:image',
+                      );
+                      final String assetPath = imageUrl.startsWith('lib/')
+                          ? imageUrl
+                          : 'lib/$imageUrl';
+
+                      Widget buildImage() {
+                        if (isDataImage) {
+                          final int commaIndex = imageUrl.indexOf(',');
+                          final String base64Data = commaIndex >= 0
+                              ? imageUrl.substring(commaIndex + 1)
+                              : '';
+                          try {
+                            final Uint8List bytes = base64Decode(base64Data);
+                            return Image.memory(
+                              bytes,
+                              width: 70,
+                              height: 70,
+                              fit: BoxFit.cover,
+                            );
+                          } catch (_) {
+                            return const ColoredBox(
+                              color: Color(0xFFEFEFEF),
+                              child: Center(
+                                child: Icon(
+                                  Icons.broken_image_outlined,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            );
+                          }
+                        }
+
+                        if (isNetworkImage) {
+                          return Image.network(
+                            imageUrl,
+                            width: 70,
+                            height: 70,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => const Center(
+                              child: Icon(
+                                Icons.broken_image_outlined,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          );
+                        }
+
+                        return Image.asset(
+                          assetPath,
+                          width: 70,
+                          height: 70,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => const Center(
+                            child: Icon(
+                              Icons.broken_image_outlined,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        );
+                      }
+
                       return Card(
                         margin: const EdgeInsets.only(bottom: 12),
                         shape: RoundedRectangleBorder(
@@ -65,12 +132,7 @@ class CartScreen extends StatelessWidget {
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
-                                child: Image.network(
-                                  item.product.imageUrl,
-                                  width: 70,
-                                  height: 70,
-                                  fit: BoxFit.cover,
-                                ),
+                                child: buildImage(),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
@@ -111,7 +173,9 @@ class CartScreen extends StatelessWidget {
                                         cart.increaseQty(item.product.id),
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.remove_circle_outline),
+                                    icon: const Icon(
+                                      Icons.remove_circle_outline,
+                                    ),
                                     onPressed: () {
                                       if (item.quantity > 1) {
                                         cart.decreaseQty(item.product.id);

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
+import 'dart:typed_data';
 import '../../models/product.dart';
 import '../../providers/cart_provider.dart';
 import '../../widgets/quantity_selector.dart';
@@ -23,6 +25,48 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     final product = widget.product;
     final cartProvider = context.read<CartProvider>();
+    final String imageUrl = product.imageUrl;
+    final bool isNetworkImage = imageUrl.startsWith('http');
+    final bool isDataImage = imageUrl.startsWith('data:image');
+    final String assetPath = imageUrl.startsWith('lib/')
+        ? imageUrl
+        : 'lib/$imageUrl';
+
+    Widget buildImage() {
+      if (isDataImage) {
+        final int commaIndex = imageUrl.indexOf(',');
+        final String base64Data = commaIndex >= 0
+            ? imageUrl.substring(commaIndex + 1)
+            : '';
+        try {
+          final Uint8List bytes = base64Decode(base64Data);
+          return Image.memory(bytes, fit: BoxFit.cover, width: double.infinity);
+        } catch (_) {
+          return const ColoredBox(
+            color: Color(0xFFEFEFEF),
+            child: Center(
+              child: Icon(Icons.broken_image_outlined, color: Colors.grey),
+            ),
+          );
+        }
+      }
+
+      if (isNetworkImage) {
+        return Image.network(
+          imageUrl,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          errorBuilder: (_, __, ___) => const ColoredBox(
+            color: Color(0xFFEFEFEF),
+            child: Center(
+              child: Icon(Icons.broken_image_outlined, color: Colors.grey),
+            ),
+          ),
+        );
+      }
+
+      return Image.asset(assetPath, fit: BoxFit.cover, width: double.infinity);
+    }
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -114,14 +158,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(14),
-                      child: AspectRatio(
-                        aspectRatio: 1.1,
-                        child: Image.network(
-                          product.imageUrl,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        ),
-                      ),
+                      child: AspectRatio(aspectRatio: 1.1, child: buildImage()),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -443,16 +480,77 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
               ElevatedButton.icon(
                 onPressed: () {
+                  debugPrint(
+                    'ProductDetail.addPressed: ${product.id}, qty=$qty',
+                  );
                   for (int i = 0; i < qty; i++) {
                     cartProvider.addToCart(product);
                   }
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("បានបន្ថែម ទៅកន្ត្រក $qty"),
-                      backgroundColor: AppColors.primary,
-                    ),
+
+                  showDialog<void>(
+                    context: context,
+                    barrierDismissible: false,
+                    barrierColor: Colors.black.withValues(alpha: 0.15),
+                    builder: (_) {
+                      return Center(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: Container(
+                            width: 280,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 18,
+                              vertical: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(18),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.12),
+                                  blurRadius: 18,
+                                  offset: const Offset(0, 10),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text(
+                                  "ត្រូវបានបន្ថែមទៅកន្ត្រក",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.textPrimary,
+                                  ),
+                                ),
+                                const SizedBox(height: 14),
+                                Container(
+                                  width: 56,
+                                  height: 56,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(999),
+                                  ),
+                                  child: const Icon(
+                                    Icons.shopping_cart_outlined,
+                                    color: Colors.white,
+                                    size: 28,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   );
-                  Navigator.pop(context);
+
+                  Future.delayed(const Duration(milliseconds: 900), () {
+                    if (!mounted) return;
+                    final nav = Navigator.of(context, rootNavigator: true);
+                    if (nav.canPop()) nav.pop();
+                  });
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,

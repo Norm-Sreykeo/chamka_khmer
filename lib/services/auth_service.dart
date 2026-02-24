@@ -161,11 +161,34 @@ class AuthService {
   // Logout
   // --------------------------------------------------------------------------
   Future<void> logout() async {
+    print('Logging out...');
+
+    final prefs = await SharedPreferences.getInstance();
+
+    // 1️⃣ Clear memory
     _currentUser = null;
-    await _saveCurrentUser();
-    await _googleSignIn.signOut();
-    await FacebookAuth.instance.logOut();
-    print('User logged out');
+
+    // 2️⃣ Remove from storage
+    await prefs.remove('currentUser');
+
+    // 3️⃣ Google logout safely
+    try {
+      if (await _googleSignIn.isSignedIn()) {
+        await _googleSignIn.disconnect();
+        await _googleSignIn.signOut();
+      }
+    } catch (e) {
+      print('Google logout error: $e');
+    }
+
+    // 4️⃣ Facebook logout safely
+    try {
+      await FacebookAuth.instance.logOut();
+    } catch (e) {
+      print('Facebook logout error: $e');
+    }
+
+    print('Logout completed. Current user: $_currentUser');
   }
 
   // --------------------------------------------------------------------------

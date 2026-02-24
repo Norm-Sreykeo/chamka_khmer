@@ -20,24 +20,30 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _checkLoginStatus() async {
-    // Session already loaded in main() via AuthService.initialize()
     await Future.delayed(const Duration(seconds: 2));
 
     if (!mounted) return;
 
-    // If user has account (logged in) → go straight to home (no login/register again)
-    if (_auth.currentUser != null) {
-      Navigator.pushReplacement(
+    // IMPORTANT: re-check latest stored session
+    await AuthService.initialize();
+
+    final user = _auth.currentUser;
+
+    if (user != null) {
+      // ✅ Logged in → go to main screen
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (_) => const MainScreen()),
+        (route) => false,
       );
-      return;
+    } else {
+      // ❌ Not logged in → onboarding
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+        (route) => false,
+      );
     }
-    // No account → show onboarding then login/register
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const OnboardingScreen()),
-    );
   }
 
   @override

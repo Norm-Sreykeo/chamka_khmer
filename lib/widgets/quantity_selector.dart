@@ -15,32 +15,54 @@ class QuantitySelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _button(Icons.remove, () {
-          if (value > 1) onChanged(value - 1);
-        }),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            value.toString(),
-            style: const TextStyle(fontSize: 18),
+        _circleButton(
+          icon: Icons.remove,
+          backgroundColor: const Color(0xFFEAEAEA),
+          iconColor: AppColors.textPrimary,
+          onTap: () {
+            if (value > 1) onChanged(value - 1);
+          },
+        ),
+        const Spacer(),
+        Text(
+          value.toString(),
+          style: const TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.w800,
+            color: AppColors.textPrimary,
           ),
         ),
-        _button(Icons.add, () {
-          onChanged(value + 1);
-        }),
+        const Spacer(),
+        _circleButton(
+          icon: Icons.add,
+          backgroundColor: AppColors.primary,
+          iconColor: Colors.white,
+          onTap: () {
+            onChanged(value + 1);
+          },
+        ),
       ],
     );
   }
 
-  Widget _button(IconData icon, VoidCallback onTap) {
-    return Container(
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppColors.primary,
-      ),
-      child: IconButton(
-        icon: Icon(icon, color: Colors.white),
-        onPressed: onTap,
+  Widget _circleButton({
+    required IconData icon,
+    required Color backgroundColor,
+    required Color iconColor,
+    required VoidCallback onTap,
+  }) {
+    return SizedBox(
+      width: 54,
+      height: 54,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: backgroundColor,
+        ),
+        child: IconButton(
+          icon: Icon(icon, color: iconColor, size: 28),
+          onPressed: onTap,
+        ),
       ),
     );
   }

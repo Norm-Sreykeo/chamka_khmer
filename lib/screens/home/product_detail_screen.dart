@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import '../../models/product.dart';
 import '../../providers/cart_provider.dart';
+import 'category_screen.dart';
 import '../../widgets/quantity_selector.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/helpers.dart';
@@ -20,6 +21,13 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   int qty = 1;
   bool _isFavorite = false;
+  String? _selectedSubCategory;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedSubCategory = widget.product.subCategory;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -147,6 +155,82 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 12),
+                  if (product.categoryId.trim().toLowerCase() == 'fruit')
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            ChoiceChip(
+                              label: const Text('ផ្លែឈើ'),
+                              selected: _selectedSubCategory == null,
+                              onSelected: (_) {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (_) => const CategoryScreen(
+                                      categoryId: 'fruit',
+                                      title: 'ផ្លែឈើ',
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(width: 10),
+                            ChoiceChip(
+                              label: const Text('ផ្លែឈើផ្អែម'),
+                              selected: _selectedSubCategory == 'sweet',
+                              onSelected: (_) {
+                                setState(() => _selectedSubCategory = 'sweet');
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (_) => const CategoryScreen(
+                                      categoryId: 'fruit',
+                                      title: 'ផ្លែឈើ',
+                                      initialSubCategory: 'sweet',
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(width: 10),
+                            ChoiceChip(
+                              label: const Text('ផ្លែឈើជូរ'),
+                              selected: _selectedSubCategory == 'sour',
+                              onSelected: (_) {
+                                setState(() => _selectedSubCategory = 'sour');
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (_) => const CategoryScreen(
+                                      categoryId: 'fruit',
+                                      title: 'ផ្លែឈើ',
+                                      initialSubCategory: 'sour',
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(width: 10),
+                            ChoiceChip(
+                              label: const Text('ផ្លែឈើមានទឹក'),
+                              selected: _selectedSubCategory == 'juicy',
+                              onSelected: (_) {
+                                setState(() => _selectedSubCategory = 'juicy');
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (_) => const CategoryScreen(
+                                      categoryId: 'fruit',
+                                      title: 'ផ្លែឈើ',
+                                      initialSubCategory: 'juicy',
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(

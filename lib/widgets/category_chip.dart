@@ -18,30 +18,31 @@ class CategoryChip extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => CategoryScreen(
-                categoryId: category.id,
-                title: category.name,
-              ),
+              builder: (_) =>
+                  CategoryScreen(categoryId: category.id, title: category.name),
             ),
           );
         },
         child: Container(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
           decoration: BoxDecoration(
             color: category.color ?? AppColors.primary,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Row(
             children: [
-              if (category.icon != null)
+              if (category.iconAsset != null)
+                Image.asset(
+                  category.iconAsset!,
+                  width: 18,
+                  height: 18,
+                  color: Colors.white,
+                )
+              else if (category.icon != null)
                 Icon(category.icon, color: Colors.white, size: 18),
-              if (category.icon != null)
+              if (category.iconAsset != null || category.icon != null)
                 const SizedBox(width: 6),
-              Text(
-                category.name,
-                style: const TextStyle(color: Colors.white),
-              ),
+              Text(category.name, style: const TextStyle(color: Colors.white)),
             ],
           ),
         ),

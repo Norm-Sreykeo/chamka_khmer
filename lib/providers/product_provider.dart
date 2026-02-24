@@ -31,8 +31,17 @@ class ProductProvider with ChangeNotifier {
   }
 
   List<Product> getProductsByCategory(String categoryId) {
-    return _products
-        .where((p) => p.categoryId == categoryId)
-        .toList();
+    return getProductsByCategoryAndSubCategory(categoryId);
+  }
+
+  List<Product> getProductsByCategoryAndSubCategory(
+    String categoryId, {
+    String? subCategory,
+  }) {
+    return _products.where((p) {
+      if (p.categoryId != categoryId) return false;
+      if (subCategory == null || subCategory.isEmpty) return true;
+      return p.subCategory == subCategory;
+    }).toList();
   }
 }

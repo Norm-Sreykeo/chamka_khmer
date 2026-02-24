@@ -88,6 +88,9 @@ flutter:
     - lib/assets/icons/2.png
     - lib/assets/icons/3.png
     - lib/assets/icons/4.png
+    - lib/assets/icons/5.png
+    - lib/assets/icons/6.png
+    - lib/assets/icons/7.png
     
     - lib/assets/data/categories.json
     - lib/assets/data/products.json

@@ -6,7 +6,6 @@ import 'favorites_screen.dart';
 import 'address_screen.dart';
 import 'settings_screen.dart';
 import '../auth/login_screen.dart';
-import '../main_screen.dart';
 
 /// គណនី: អតិថិជន, ប្រវត្តិការបញ្ជាទិញ, ចំណូលចិត្ត, អាសយដ្ឋាន, ទំនាក់ទំនង, ការកំណត់, ចាកចេញ
 class ProfileScreen extends StatelessWidget {
@@ -15,7 +14,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = AuthService();
-    
+
     final email = auth.currentUser?['email'] ?? 'customer@chamkar.kh';
 
     return Scaffold(
@@ -60,10 +59,7 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       const Text(
                         "អតិថិជន",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -86,9 +82,7 @@ class ProfileScreen extends StatelessWidget {
             title: "ប្រវត្តិការបញ្ជាទិញ",
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (_) => const OrderHistoryScreen(),
-              ),
+              MaterialPageRoute(builder: (_) => const OrderHistoryScreen()),
             ),
           ),
           _menuTile(
@@ -97,9 +91,7 @@ class ProfileScreen extends StatelessWidget {
             title: "ចំណូលចិត្ត",
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (_) => const FavoritesScreen(),
-              ),
+              MaterialPageRoute(builder: (_) => const FavoritesScreen()),
             ),
           ),
           _menuTile(
@@ -108,9 +100,7 @@ class ProfileScreen extends StatelessWidget {
             title: "អាសយដ្ឋាន",
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (_) => const AddressScreen(),
-              ),
+              MaterialPageRoute(builder: (_) => const AddressScreen()),
             ),
           ),
           _menuTile(
@@ -127,9 +117,7 @@ class ProfileScreen extends StatelessWidget {
             title: "ការកំណត់",
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (_) => const SettingsScreen(),
-              ),
+              MaterialPageRoute(builder: (_) => const SettingsScreen()),
             ),
           ),
           const SizedBox(height: 24),
@@ -163,17 +151,12 @@ class ProfileScreen extends StatelessWidget {
   }) {
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
         leading: Icon(icon, color: textColor ?? AppColors.primary),
         title: Text(
           title,
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-            color: textColor,
-          ),
+          style: TextStyle(fontWeight: FontWeight.w500, color: textColor),
         ),
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),
         onTap: onTap,

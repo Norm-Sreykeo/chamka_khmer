@@ -11,7 +11,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
-  
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -36,7 +35,10 @@ class HomeScreen extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF5F0E6),
-                        border: Border.all(color: const Color.fromARGB(255, 254, 167, 74), width: 1),
+                        border: Border.all(
+                          color: const Color.fromARGB(255, 254, 167, 74),
+                          width: 1,
+                        ),
                         borderRadius: BorderRadius.circular(18),
                         boxShadow: [
                           BoxShadow(
@@ -53,7 +55,6 @@ class HomeScreen extends StatelessWidget {
                             Icons.eco,
                             color: AppColors.primary.withValues(alpha: 0.85),
                             size: 35,
-
                           ),
                           const SizedBox(width: 10),
                           const Text(
@@ -140,7 +141,7 @@ class HomeScreen extends StatelessWidget {
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            childAspectRatio: 0.68,
+                            childAspectRatio: 0.78,
                             crossAxisSpacing: 12,
                             mainAxisSpacing: 12,
                           ),
@@ -167,7 +168,7 @@ class HomeScreen extends StatelessWidget {
                   /// Curved bottom that will be overlapped by the search bar.
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.fromLTRB(16,28, 16,64),
+                    padding: const EdgeInsets.fromLTRB(16, 28, 16, 64),
                     decoration: BoxDecoration(
                       color: AppColors.primary,
                       borderRadius: const BorderRadius.vertical(
@@ -231,8 +232,6 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-
-                    
                   ),
                   const SizedBox(height: 20),
 

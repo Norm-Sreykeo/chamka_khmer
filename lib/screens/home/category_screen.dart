@@ -16,21 +16,19 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final products = Provider.of<ProductProvider>(context)
-        .getProductsByCategory(categoryId);
+    final products = Provider.of<ProductProvider>(
+      context,
+    ).getProductsByCategory(categoryId);
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: Text(title),
-        backgroundColor: AppColors.primary,
-      ),
+      appBar: AppBar(title: Text(title), backgroundColor: AppColors.primary),
       body: GridView.builder(
         padding: const EdgeInsets.all(12),
         itemCount: products.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: .75,
+          childAspectRatio: .78,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
         ),

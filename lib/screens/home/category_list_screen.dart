@@ -92,13 +92,12 @@ class CategoryListScreen extends StatelessWidget {
                 itemCount: productProvider.products.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 0.68,
+                  childAspectRatio: 0.78,
                   crossAxisSpacing: 12,
                   mainAxisSpacing: 12,
                 ),
                 itemBuilder: (context, index) {
-                  return ProductCard(
-                      product: productProvider.products[index]);
+                  return ProductCard(product: productProvider.products[index]);
                 },
               ),
             ),

@@ -89,7 +89,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("ចុះឈ្មោះជោគជ័យ! កំពុងចូលគណនី..."),
+          content: const Text("បង្កើតគណនីបានជោគជ័យ"),
           backgroundColor: AppColors.success,
         ),
       );

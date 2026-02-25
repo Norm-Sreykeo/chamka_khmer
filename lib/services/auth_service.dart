@@ -1,31 +1,18 @@
 import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class AuthService {
-  // In-memory storage for mock users
-  static List<Map <String, dynamic>> _mockUsers = [
-  {
-    'email': 'admin@gmail.com',
-    'password': '123456',
-    'fullName': 'Admin User',
-    'phone': '000000000',
-  },
-  {
-    'email': 'user@gmail.com',
-    'password': '123456',
-    'fullName': 'Normal User',
-    'phone': '111111111',
-  },
-];
-
-  // Currently logged-in user
-  static Map<String, dynamic>? _currentUser;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // Social login instances
   static final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  static StreamSubscription<User?>? _authSub;
+  static Map<String, dynamic>? _currentUser;
 
   Map<String, dynamic>? get currentUser => _currentUser;
 
@@ -33,63 +20,40 @@ class AuthService {
   // Initialization: load users and current user from storage
   // --------------------------------------------------------------------------
   static Future<void> initialize() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    // Load saved users
-    final usersJson = prefs.getString('mockUsers');
-    if (usersJson != null) {
-      _mockUsers = List<Map<String, dynamic>>.from(
-        (json.decode(usersJson) as List<dynamic>),
-      );
-    }
-
-    // Load last logged-in user
-    final currentUserJson = prefs.getString('currentUser');
-    if (currentUserJson != null) {
-      _currentUser = Map<String, dynamic>.from(json.decode(currentUserJson));
-      print('Loaded logged-in user: ${_currentUser!['email']}');
-    }
+    _currentUser = _userToMap(_auth.currentUser);
+    _authSub?.cancel();
+    _authSub = _auth.authStateChanges().listen((u) {
+      _currentUser = _userToMap(u);
+    });
   }
 
-  // --------------------------------------------------------------------------
-  // Save current state to SharedPreferences
-  // --------------------------------------------------------------------------
-  static Future<void> _saveUsers() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('mockUsers', json.encode(_mockUsers));
-  }
-
-  static Future<void> _saveCurrentUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (_currentUser != null) {
-      await prefs.setString('currentUser', json.encode(_currentUser));
-    } else {
-      await prefs.remove('currentUser');
-    }
+  static Map<String, dynamic>? _userToMap(User? user) {
+    if (user == null) return null;
+    return {
+      'uid': user.uid,
+      'email': user.email ?? '',
+      'fullName': user.displayName ?? '',
+      'phone': user.phoneNumber ?? '',
+      'photoUrl': user.photoURL,
+      'loginMethod': 'firebase',
+    };
   }
 
   // --------------------------------------------------------------------------
   // Login
   // --------------------------------------------------------------------------
   Future<bool> login(String email, String password) async {
-    await Future.delayed(const Duration(milliseconds: 800));
-
-    final normalizedEmail = email.trim().toLowerCase();
-
-    final user = _mockUsers.firstWhere(
-      (u) => u['email'] == normalizedEmail,
-      orElse: () => <String, dynamic>{},
-    );
-
-    if (user.isNotEmpty && user['password'] == password) {
-      _currentUser = Map.from(user)..remove('password');
-      await _saveCurrentUser();
-      print('Login SUCCESS: $normalizedEmail → ${_currentUser!['fullName']}');
-      return true;
+    try {
+      final normalizedEmail = email.trim().toLowerCase();
+      final cred = await _auth.signInWithEmailAndPassword(
+        email: normalizedEmail,
+        password: password,
+      );
+      _currentUser = _userToMap(cred.user);
+      return cred.user != null;
+    } catch (e) {
+      return false;
     }
-
-    print('Login FAILED: $normalizedEmail - invalid credentials');
-    return false;
   }
 
   // --------------------------------------------------------------------------
@@ -101,75 +65,50 @@ class AuthService {
     required String fullName,
     required String phone,
   }) async {
-    await Future.delayed(const Duration(milliseconds: 1000));
+    try {
+      final normalizedEmail = email.trim().toLowerCase();
+      final cred = await _auth.createUserWithEmailAndPassword(
+        email: normalizedEmail,
+        password: password,
+      );
+      final user = cred.user;
+      if (user == null) return false;
 
-    final normalizedEmail = email.trim().toLowerCase();
+      await user.updateDisplayName(fullName.trim());
 
-    if (normalizedEmail.isEmpty ||
-        password.isEmpty ||
-        fullName.trim().isEmpty ||
-        phone.trim().isEmpty) {
-      print('Register FAILED: missing required fields');
+      await _firestore.collection('users').doc(user.uid).set({
+        'fullName': fullName.trim(),
+        'phone': phone.trim(),
+        'email': normalizedEmail,
+        'createdAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      _currentUser = _userToMap(_auth.currentUser);
+      return true;
+    } catch (e) {
       return false;
     }
-
-    final emailExists = _mockUsers.any((u) => u['email'] == normalizedEmail);
-
-    if (emailExists) {
-      print('Register FAILED: email already in use → $normalizedEmail');
-      return false;
-    }
-
-    final newUser = {
-      'email': normalizedEmail,
-      'password': password, // only for mock
-      'fullName': fullName.trim(),
-      'phone': phone.trim(),
-      'createdAt': DateTime.now().toIso8601String(),
-    };
-
-    _mockUsers.add(newUser);
-    await _saveUsers();
-
-    // Auto-login after registration
-    _currentUser = Map.from(newUser)..remove('password');
-    await _saveCurrentUser();
-
-    print('Register SUCCESS: $normalizedEmail | $fullName | $phone');
-    return true;
   }
 
   // --------------------------------------------------------------------------
   // Password reset
   // --------------------------------------------------------------------------
   Future<bool> resetPassword(String email) async {
-    await Future.delayed(const Duration(milliseconds: 1200));
-    final normalizedEmail = email.trim().toLowerCase();
-
-    final userExists = _mockUsers.any((u) => u['email'] == normalizedEmail);
-
-    if (!userExists) {
-      print('Reset FAILED: email not found → $normalizedEmail');
+    try {
+      final normalizedEmail = email.trim().toLowerCase();
+      await _auth.sendPasswordResetEmail(email: normalizedEmail);
+      return true;
+    } catch (e) {
       return false;
     }
-
-    print('Reset link "sent" to: $normalizedEmail');
-    return true;
   }
 
   // --------------------------------------------------------------------------
   // Logout
   // --------------------------------------------------------------------------
   Future<void> logout() async {
-    print('Logging out...');
-
-    final prefs = await SharedPreferences.getInstance();
-
-    // 1️⃣ Clear memory
     _currentUser = null;
-
-    // 2️⃣ Remove from storage
-    await prefs.remove('currentUser');
+    await _auth.signOut();
 
     // 3️⃣ Google logout safely
     try {
@@ -187,8 +126,6 @@ class AuthService {
     } catch (e) {
       print('Facebook logout error: $e');
     }
-
-    print('Logout completed. Current user: $_currentUser');
   }
 
   // --------------------------------------------------------------------------
@@ -214,21 +151,15 @@ class AuthService {
 
       print('Google Sign-In successful for: ${googleUser.email}');
 
-      // Create user data from Google account
-      _currentUser = {
-        'email': googleUser.email,
-        'fullName': googleUser.displayName ?? 'Google User',
-        'phone': '',
-        'photoUrl': googleUser.photoUrl,
-        'loginMethod': 'google',
-        'createdAt': DateTime.now().toIso8601String(),
-      };
-
-      await _saveCurrentUser();
-      print(
-        'Google Sign-In SUCCESS: ${_currentUser!['email']} → ${_currentUser!['fullName']}',
+      final googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
       );
-      return true;
+
+      final cred = await _auth.signInWithCredential(credential);
+      _currentUser = _userToMap(cred.user);
+      return cred.user != null;
     } catch (e) {
       print('Google Sign-In ERROR: $e');
       print('Stack trace: ${StackTrace.current}');
@@ -255,26 +186,13 @@ class AuthService {
         return false;
       }
 
-      print('Facebook Sign-In successful, getting user data...');
-      final userData = await FacebookAuth.instance.getUserData();
+      final accessToken = result.accessToken;
+      if (accessToken == null) return false;
 
-      print('Facebook user data received: ${userData['name']}');
-
-      // Create user data from Facebook account
-      _currentUser = {
-        'email': userData['email'] ?? '',
-        'fullName': userData['name'] ?? 'Facebook User',
-        'phone': '',
-        'photoUrl': userData['picture']['data']['url'] ?? '',
-        'loginMethod': 'facebook',
-        'createdAt': DateTime.now().toIso8601String(),
-      };
-
-      await _saveCurrentUser();
-      print(
-        'Facebook Sign-In SUCCESS: ${_currentUser!['email']} → ${_currentUser!['fullName']}',
-      );
-      return true;
+      final credential = FacebookAuthProvider.credential(accessToken.token);
+      final cred = await _auth.signInWithCredential(credential);
+      _currentUser = _userToMap(cred.user);
+      return cred.user != null;
     } catch (e) {
       print('Facebook Sign-In ERROR: $e');
       print('Stack trace: ${StackTrace.current}');
@@ -286,25 +204,11 @@ class AuthService {
   // Debug
   // --------------------------------------------------------------------------
   static void debugPrintUsers() {
-    if (_mockUsers.isEmpty) {
-      print('No users registered yet.');
-      return;
-    }
-
-    print('=== Mock Users (${_mockUsers.length}) ===');
-    for (var u in _mockUsers) {
-      print(' • ${u['email']} | ${u['fullName']} | ${u['phone']}');
-    }
     print('Current logged in: ${_currentUser?['email'] ?? "nobody"}');
-    print('========================');
   }
 
   static Future<void> debugClearAll() async {
-    _mockUsers.clear();
     _currentUser = null;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('mockUsers');
-    await prefs.remove('currentUser');
-    print('AuthService cleared');
+    await _auth.signOut();
   }
 }

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import '../models/product.dart';
 import '../models/category.dart';
 import '../services/api_service.dart';
+import '../services/firestore_service.dart';
 
 class ProductProvider with ChangeNotifier {
   final ApiService _apiService = ApiService();
+  FirestoreService? _firestoreService;
 
   List<Product> _products = [];
   List<Category> _categories = [];
@@ -20,10 +23,28 @@ class ProductProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      _products = await _apiService.getProducts();
-      _categories = await _apiService.getCategories();
+      if (Firebase.apps.isNotEmpty) {
+        final firestoreService = _firestoreService ??= FirestoreService();
+        await firestoreService.seedFromAssetsIfEmpty();
+        _products = await firestoreService.getProducts();
+        _categories = await firestoreService.getCategories();
+
+        if (_products.isEmpty || _categories.isEmpty) {
+          _products = await _apiService.getProducts();
+          _categories = await _apiService.getCategories();
+        }
+      } else {
+        _products = await _apiService.getProducts();
+        _categories = await _apiService.getCategories();
+      }
     } catch (e) {
       debugPrint("Error loading data: $e");
+      try {
+        _products = await _apiService.getProducts();
+        _categories = await _apiService.getCategories();
+      } catch (e) {
+        debugPrint("Error loading fallback data: $e");
+      }
     }
 
     _loading = false;

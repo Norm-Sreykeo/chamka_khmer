@@ -6,12 +6,32 @@ import '../../widgets/category_grid_card.dart';
 import '../../core/theme/app_colors.dart';
 
 /// Tab "ប្រភេទ": ប្រភេទផលិតផល, search រើសផ្លែឈើ និងបន្លែស្រស់, product grid
-class CategoryListScreen extends StatelessWidget {
+class CategoryListScreen extends StatefulWidget {
   const CategoryListScreen({super.key});
+
+  @override
+  State<CategoryListScreen> createState() => _CategoryListScreenState();
+}
+
+class _CategoryListScreenState extends State<CategoryListScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
+    final q = _query.trim().toLowerCase();
+    final filteredProducts = q.isEmpty
+        ? productProvider.products
+        : productProvider.products
+              .where((p) => p.name.toLowerCase().contains(q))
+              .toList();
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -40,6 +60,10 @@ class CategoryListScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     TextField(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        setState(() => _query = value);
+                      },
                       decoration: InputDecoration(
                         hintText: "រើសផ្លែឈើ និងបន្លែស្រស់",
                         filled: true,
@@ -48,6 +72,18 @@ class CategoryListScreen extends StatelessWidget {
                           Icons.search,
                           color: Colors.grey,
                         ),
+                        suffixIcon: _query.trim().isEmpty
+                            ? null
+                            : IconButton(
+                                onPressed: () {
+                                  _searchController.clear();
+                                  setState(() => _query = '');
+                                },
+                                icon: const Icon(
+                                  Icons.close,
+                                  color: Colors.grey,
+                                ),
+                              ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide.none,
@@ -115,8 +151,8 @@ class CategoryListScreen extends StatelessWidget {
                   mainAxisSpacing: 12,
                 ),
                 delegate: SliverChildBuilderDelegate((context, index) {
-                  return ProductCard(product: productProvider.products[index]);
-                }, childCount: productProvider.products.length),
+                  return ProductCard(product: filteredProducts[index]);
+                }, childCount: filteredProducts.length),
               ),
             ),
           ],

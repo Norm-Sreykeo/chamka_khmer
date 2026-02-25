@@ -5,12 +5,32 @@ import '../../widgets/product_card.dart';
 import '../../widgets/category_grid_card.dart';
 import '../../core/theme/app_colors.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
+    final q = _query.trim().toLowerCase();
+    final filteredProducts = q.isEmpty
+        ? productProvider.products
+        : productProvider.products
+              .where((p) => p.name.toLowerCase().contains(q))
+              .toList();
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -137,7 +157,7 @@ class HomeScreen extends StatelessWidget {
                     child: GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: productProvider.products.length,
+                      itemCount: filteredProducts.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
@@ -146,9 +166,7 @@ class HomeScreen extends StatelessWidget {
                             mainAxisSpacing: 12,
                           ),
                       itemBuilder: (context, index) {
-                        return ProductCard(
-                          product: productProvider.products[index],
-                        );
+                        return ProductCard(product: filteredProducts[index]);
                       },
                     ),
                   ),
@@ -245,6 +263,10 @@ class HomeScreen extends StatelessWidget {
                       shadowColor: Colors.black26,
                       borderRadius: BorderRadius.circular(24),
                       child: TextField(
+                        controller: _searchController,
+                        onChanged: (value) {
+                          setState(() => _query = value);
+                        },
                         decoration: InputDecoration(
                           hintText: "ស្វែងផ្លែឈើ និង បន្លែ",
                           hintStyle: TextStyle(
@@ -258,6 +280,18 @@ class HomeScreen extends StatelessWidget {
                             color: Colors.grey.shade600,
                             size: 22,
                           ),
+                          suffixIcon: _query.trim().isEmpty
+                              ? null
+                              : IconButton(
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    setState(() => _query = '');
+                                  },
+                                  icon: const Icon(
+                                    Icons.close,
+                                    color: Colors.grey,
+                                  ),
+                                ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(24),
                             borderSide: BorderSide.none,

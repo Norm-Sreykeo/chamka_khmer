@@ -1,39 +1,25 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
+
 import '../../providers/product_provider.dart';
+
 import '../../widgets/product_card.dart';
+
 import '../../widgets/category_grid_card.dart';
+
 import '../../core/theme/app_colors.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController _searchController = TextEditingController();
-  String _query = '';
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
-    final q = _query.trim().toLowerCase();
-    final filteredProducts = q.isEmpty
-        ? productProvider.products
-        : productProvider.products
-              .where((p) => p.name.toLowerCase().contains(q))
-              .toList();
 
     return Scaffold(
       backgroundColor: AppColors.background,
+
       body: SafeArea(
         child: Stack(
           children: [
@@ -47,48 +33,70 @@ class _HomeScreenState extends State<HomeScreen> {
                   /// Banner: light beige, leaf icons, centered text
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
+
                     child: Container(
                       width: double.infinity,
+
                       padding: const EdgeInsets.symmetric(
                         vertical: 8,
+
                         horizontal: 15,
                       ),
+
                       decoration: BoxDecoration(
                         color: const Color(0xFFF5F0E6),
+
                         border: Border.all(
                           color: const Color.fromARGB(255, 254, 167, 74),
                           width: 1,
                         ),
+
                         borderRadius: BorderRadius.circular(18),
+
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.04),
+
                             blurRadius: 8,
+
                             offset: const Offset(0, 2),
                           ),
                         ],
                       ),
+
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+
                         children: [
                           Icon(
                             Icons.eco,
+
                             color: AppColors.primary.withValues(alpha: 0.85),
+
                             size: 35,
                           ),
+
                           const SizedBox(width: 10),
+
                           const Text(
                             "ផ្លែឈើ និង បន្លែស្រស់ពីចម្ការ",
+
                             style: TextStyle(
                               fontSize: 15,
+
                               fontWeight: FontWeight.w600,
+
                               color: AppColors.textPrimary,
                             ),
                           ),
+
                           const SizedBox(width: 10),
+
                           Icon(
                             Icons.eco,
+
                             color: AppColors.primary.withValues(alpha: 0.85),
+
                             size: 22,
                           ),
                         ],
@@ -101,29 +109,42 @@ class _HomeScreenState extends State<HomeScreen> {
                   /// Section: ប្រភេទផលិតផល — horizontal row of 4 category cards
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
+
                     child: Align(
                       alignment: Alignment.centerLeft,
+
                       child: Text(
                         "ប្រភេទផលិតផល",
+
                         style: const TextStyle(
                           fontSize: 18,
+
                           fontWeight: FontWeight.bold,
+
                           color: AppColors.textPrimary,
                         ),
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 12),
+
                   SizedBox(
                     height: 100,
+
                     child: ListView.separated(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
+
                       scrollDirection: Axis.horizontal,
+
                       itemCount: productProvider.categories.length,
+
                       separatorBuilder: (_, __) => const SizedBox(width: 12),
+
                       itemBuilder: (context, index) {
                         return SizedBox(
                           width: 82,
+
                           child: CategoryGridCard(
                             category: productProvider.categories[index],
                           ),
@@ -137,36 +158,52 @@ class _HomeScreenState extends State<HomeScreen> {
                   /// Section: ផលិតផលពេញនិយម
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
+
                     child: Align(
                       alignment: Alignment.centerLeft,
+
                       child: Text(
                         "ផលិតផលពេញនិយម",
+
                         style: const TextStyle(
                           fontSize: 18,
+
                           fontWeight: FontWeight.bold,
+
                           color: AppColors.textPrimary,
                         ),
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 12),
 
                   /// Products grid
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+
                     child: GridView.builder(
                       shrinkWrap: true,
+
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: filteredProducts.length,
+
+                      itemCount: productProvider.products.length,
+
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            childAspectRatio: 0.78,
+
+                            childAspectRatio: 0.68,
+
                             crossAxisSpacing: 12,
+
                             mainAxisSpacing: 12,
                           ),
+
                       itemBuilder: (context, index) {
-                        return ProductCard(product: filteredProducts[index]);
+                        return ProductCard(
+                          product: productProvider.products[index],
+                        );
                       },
                     ),
                   ),
@@ -177,71 +214,103 @@ class _HomeScreenState extends State<HomeScreen> {
             /// Sticky header and search bar
             Positioned(
               top: 0,
+
               left: 0,
+
               right: 0,
+
               child: Stack(
                 clipBehavior: Clip.none,
+
                 children: [
                   /// Header (dark green only): logo in light green circle + name + tagline.
+
                   /// Curved bottom that will be overlapped by the search bar.
                   Container(
                     width: double.infinity,
+
                     padding: const EdgeInsets.fromLTRB(16, 28, 16, 64),
+
                     decoration: BoxDecoration(
                       color: AppColors.primary,
+
                       borderRadius: const BorderRadius.vertical(
                         bottom: Radius.circular(28),
                       ),
                     ),
+
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
+
                       children: [
                         /// Logo: light green circle with white circle and fruit image inside
                         Container(
                           width: 56,
+
                           height: 56,
+
                           decoration: BoxDecoration(
                             color: const Color(0xFFA8D89B),
+
                             shape: BoxShape.circle,
+
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withValues(alpha: 0.1),
+
                                 blurRadius: 6,
+
                                 offset: const Offset(0, 2),
                               ),
                             ],
                           ),
+
                           padding: const EdgeInsets.all(4),
+
                           child: Container(
                             decoration: const BoxDecoration(
                               color: Colors.white,
+
                               shape: BoxShape.circle,
                             ),
+
                             clipBehavior: Clip.antiAlias,
+
                             child: Image.asset(
                               "lib/assets/images/img1.png",
+
                               fit: BoxFit.cover,
                             ),
                           ),
                         ),
+
                         const SizedBox(width: 14),
+
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+
                             children: [
                               const Text(
                                 "ចម្ការខ្មែរ",
+
                                 style: TextStyle(
                                   color: Colors.white,
+
                                   fontSize: 22,
+
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+
                               const SizedBox(height: 2),
+
                               Text(
                                 "ស្រស់ពីចម្ការ ជារៀងរាល់ថ្ងៃ",
+
                                 style: TextStyle(
                                   color: Colors.white.withValues(alpha: 0.92),
+
                                   fontSize: 13,
                                 ),
                               ),
@@ -251,53 +320,55 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
+
                   const SizedBox(height: 20),
 
                   /// Search bar overlapping the header's bottom curve
                   Positioned(
                     left: 16,
+
                     right: 16,
+
                     bottom: 5,
+
                     child: Material(
                       elevation: 4,
+
                       shadowColor: Colors.black26,
+
                       borderRadius: BorderRadius.circular(24),
+
                       child: TextField(
-                        controller: _searchController,
-                        onChanged: (value) {
-                          setState(() => _query = value);
-                        },
                         decoration: InputDecoration(
                           hintText: "ស្វែងផ្លែឈើ និង បន្លែ",
+
                           hintStyle: TextStyle(
                             color: AppColors.textPrimary.withValues(alpha: 0.6),
+
                             fontSize: 14,
                           ),
+
                           filled: true,
+
                           fillColor: Colors.white,
+
                           prefixIcon: Icon(
                             Icons.search,
+
                             color: Colors.grey.shade600,
+
                             size: 22,
                           ),
-                          suffixIcon: _query.trim().isEmpty
-                              ? null
-                              : IconButton(
-                                  onPressed: () {
-                                    _searchController.clear();
-                                    setState(() => _query = '');
-                                  },
-                                  icon: const Icon(
-                                    Icons.close,
-                                    color: Colors.grey,
-                                  ),
-                                ),
+
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(24),
+
                             borderSide: BorderSide.none,
                           ),
+
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 20,
+
                             vertical: 14,
                           ),
                         ),

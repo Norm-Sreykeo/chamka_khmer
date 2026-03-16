@@ -20,11 +20,34 @@ class AuthService {
   // Initialization: load users and current user from storage
   // --------------------------------------------------------------------------
   static Future<void> initialize() async {
-    _currentUser = _userToMap(_auth.currentUser);
+    _currentUser = await _buildCurrentUser(_auth.currentUser);
     _authSub?.cancel();
-    _authSub = _auth.authStateChanges().listen((u) {
-      _currentUser = _userToMap(u);
+    _authSub = _auth.authStateChanges().listen((u) async {
+      _currentUser = await _buildCurrentUser(u);
     });
+  }
+
+  static Future<Map<String, dynamic>?> _buildCurrentUser(User? user) async {
+    final base = _userToMap(user);
+    if (base == null) return null;
+
+    try {
+      final uid = base['uid'] as String?;
+      if (uid == null || uid.isEmpty) return base;
+
+      final snap = await _firestore.collection('users').doc(uid).get();
+      final data = snap.data();
+      if (data == null) return base;
+
+      return {
+        ...base,
+        'fullName': (data['fullName'] ?? base['fullName'] ?? '').toString(),
+        'phone': (data['phone'] ?? base['phone'] ?? '').toString(),
+        'address': data['address'],
+      };
+    } catch (e) {
+      return base;
+    }
   }
 
   static Map<String, dynamic>? _userToMap(User? user) {
@@ -49,7 +72,7 @@ class AuthService {
         email: normalizedEmail,
         password: password,
       );
-      _currentUser = _userToMap(cred.user);
+      _currentUser = await _buildCurrentUser(cred.user);
       return cred.user != null;
     } catch (e) {
       return false;
@@ -83,7 +106,25 @@ class AuthService {
         'createdAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-      _currentUser = _userToMap(_auth.currentUser);
+      _currentUser = await _buildCurrentUser(_auth.currentUser);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> updateAddress(String address) async {
+    try {
+      final uid = _auth.currentUser?.uid;
+      if (uid == null || uid.isEmpty) return false;
+
+      final trimmed = address.trim();
+      await _firestore.collection('users').doc(uid).set({
+        'address': trimmed,
+      }, SetOptions(merge: true));
+
+      _currentUser = {...?_currentUser, 'address': trimmed};
+
       return true;
     } catch (e) {
       return false;
@@ -158,7 +199,7 @@ class AuthService {
       );
 
       final cred = await _auth.signInWithCredential(credential);
-      _currentUser = _userToMap(cred.user);
+      _currentUser = await _buildCurrentUser(cred.user);
       return cred.user != null;
     } catch (e) {
       print('Google Sign-In ERROR: $e');
@@ -191,7 +232,7 @@ class AuthService {
 
       final credential = FacebookAuthProvider.credential(accessToken.token);
       final cred = await _auth.signInWithCredential(credential);
-      _currentUser = _userToMap(cred.user);
+      _currentUser = await _buildCurrentUser(cred.user);
       return cred.user != null;
     } catch (e) {
       print('Facebook Sign-In ERROR: $e');

@@ -39,4 +39,21 @@ class AppTheme {
 
     snackBarTheme: const SnackBarThemeData(behavior: SnackBarBehavior.fixed),
   );
+
+  static ThemeData darkTheme = ThemeData(
+    useMaterial3: true,
+    fontFamily: TextStyles.fontFamily,
+    brightness: Brightness.dark,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: AppColors.primary,
+      brightness: Brightness.dark,
+    ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.primary,
+      foregroundColor: Colors.white,
+      centerTitle: true,
+      elevation: 0,
+    ),
+    snackBarTheme: const SnackBarThemeData(behavior: SnackBarBehavior.fixed),
+  );
 }

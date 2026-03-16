@@ -1,12 +1,62 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../services/auth_service.dart';
 
 /// អាសយដ្ឋាន - ផ្ទះ, កន្លែងធ្វើការ, កែសម្រួល, លំនាំដើម, បន្ថែមអាសយដ្ឋានថ្មី
-class AddressScreen extends StatelessWidget {
+class AddressScreen extends StatefulWidget {
   const AddressScreen({super.key});
 
   @override
+  State<AddressScreen> createState() => _AddressScreenState();
+}
+
+class _AddressScreenState extends State<AddressScreen> {
+  final AuthService _auth = AuthService();
+  final TextEditingController _addressController = TextEditingController();
+
+  bool _isSaving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final current = _auth.currentUser;
+    _addressController.text = (current?['address'] ?? '').toString();
+  }
+
+  @override
+  void dispose() {
+    _addressController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _save() async {
+    if (_isSaving) return;
+    setState(() => _isSaving = true);
+
+    final ok = await _auth.updateAddress(_addressController.text);
+
+    if (!mounted) return;
+    setState(() => _isSaving = false);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          ok
+              ? "រក្សាទុកអាសយដ្ឋានបានជោគជ័យ"
+              : "រក្សាទុកមិនបាន សូមព្យាយាមម្ដងទៀត",
+        ),
+        backgroundColor: ok ? AppColors.success : Colors.red,
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final user = _auth.currentUser;
+    final name = (user?['fullName'] ?? '').toString();
+    final phone = (user?['phone'] ?? '').toString();
+    final hasUser = user != null;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -18,35 +68,48 @@ class AddressScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _addressCard(
-            title: "ផ្ទះ",
-            name: "សុខ ចន្ថា",
-            phone: "093 846 485",
-            address:
-                "ផ្ទះលេខ ៣៥, ផ្លូវ ២៨៨, សង្កាត់ទឹកល្អក់ ១, ខណ្ឌ ទួល គោក, រាជធានីភ្នំពេញ",
-            isDefault: true,
-          ),
-          const SizedBox(height: 12),
-          _addressCard(
-            title: "កន្លែង ធ្វើ ការ",
-            name: "សុខ ចន្ថា",
-            phone: "093 846 485",
-            address:
-                "ផ្ទះលេខ ៣៥, ផ្លូវ ២៨៨, សង្កាត់ទឹកល្អក់ ១, ខណ្ឌ ទួល គោក, រាជធានីភ្នំពេញ",
-            isDefault: false,
-          ),
-          const SizedBox(height: 24),
+          if (!hasUser)
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Text(
+                "សូមចូលគណនីជាមុនសិន",
+                style: TextStyle(fontSize: 14),
+              ),
+            )
+          else
+            _addressCard(
+              title: "អាសយដ្ឋាន",
+              name: name.isEmpty ? "-" : name,
+              phone: phone.isEmpty ? "-" : phone,
+              addressController: _addressController,
+            ),
+          const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.add),
-              label: const Text("បន្ថែមអាសយដ្ឋានថ្មី"),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.primary,
-                side: const BorderSide(color: AppColors.primary),
+            child: ElevatedButton(
+              onPressed: hasUser && !_isSaving ? _save : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
+              child: _isSaving
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Text("រក្សាទុក"),
             ),
           ),
         ],
@@ -58,8 +121,7 @@ class AddressScreen extends StatelessWidget {
     required String title,
     required String name,
     required String phone,
-    required String address,
-    required bool isDefault,
+    required TextEditingController addressController,
   }) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -87,37 +149,33 @@ class AddressScreen extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              TextButton(
-                onPressed: () {},
-                child: const Text("កែសម្រួល"),
-              ),
-              if (isDefault)
-                Container(
-                  margin: const EdgeInsets.only(left: 4),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Text(
-                    "លំនាំដើម",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ),
             ],
           ),
           const SizedBox(height: 8),
           Text("ឈ្មោះ: $name", style: const TextStyle(fontSize: 14)),
-          Text("លេខទូរស័ព្ទ: $phone",
-              style: const TextStyle(fontSize: 14)),
+          Text("លេខទូរស័ព្ទ: $phone", style: const TextStyle(fontSize: 14)),
           const SizedBox(height: 4),
-          Text("អាសយដ្ឋានៈ $address",
-              style: TextStyle(fontSize: 13, color: Colors.grey.shade700)),
+          TextField(
+            controller: addressController,
+            maxLines: 3,
+            decoration: InputDecoration(
+              hintText: "បញ្ចូលអាសយដ្ឋាន",
+              filled: true,
+              fillColor: AppColors.background,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: AppColors.primary),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 12,
+              ),
+            ),
+          ),
         ],
       ),
     );

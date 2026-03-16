@@ -5,8 +5,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'providers/auth_provider.dart';
 import 'providers/cart_provider.dart';
+import 'providers/favorites_provider.dart';
 import 'providers/order_provider.dart';
 import 'providers/product_provider.dart';
+import 'providers/settings_provider.dart';
 import 'services/auth_service.dart';
 import 'app.dart';
 
@@ -36,6 +38,10 @@ class AppProviders extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
 
         ChangeNotifierProvider(create: (_) => ProductProvider()..loadData()),
+
+        ChangeNotifierProvider(create: (_) => FavoritesProvider()),
+
+        ChangeNotifierProvider(create: (_) => SettingsProvider()..load()),
 
         ChangeNotifierProvider(create: (_) => CartProvider()),
 

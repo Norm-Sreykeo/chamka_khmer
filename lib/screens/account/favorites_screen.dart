@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/product_provider.dart';
+import '../../providers/favorites_provider.dart';
 import '../../widgets/product_card.dart';
 import '../../core/theme/app_colors.dart';
 
@@ -11,8 +12,10 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
-    // Mock: show first 3 products as "favorites"; in real app use a FavoritesProvider
-    final favorites = productProvider.products.take(3).toList();
+    final favoritesProvider = context.watch<FavoritesProvider>();
+    final favorites = productProvider.products
+        .where((p) => favoritesProvider.isFavorite(p.id))
+        .toList();
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -26,10 +29,7 @@ class FavoritesScreen extends StatelessWidget {
           ? Center(
               child: Text(
                 "មិនមានផលិតផលចំណូលចិត្ត",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey.shade700,
-                ),
+                style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
               ),
             )
           : ListView(

@@ -20,12 +20,10 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _checkLoginStatus() async {
-    await Future.delayed(const Duration(seconds: 2));
-
-    if (!mounted) return;
-
     // IMPORTANT: re-check latest stored session
     await AuthService.initialize();
+
+    if (!mounted) return;
 
     final user = _auth.currentUser;
 
@@ -75,15 +73,8 @@ class _SplashScreenState extends State<SplashScreen> {
             const Text(
               "ផ្លែឈើនិង បន្លែស្រស់ពីចម្ការ",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.white70,
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.white70),
             ),
-
-            const SizedBox(height: 10),
-
-            const CircularProgressIndicator(color: Colors.white),
           ],
         ),
       ),

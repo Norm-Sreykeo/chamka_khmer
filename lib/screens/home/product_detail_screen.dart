@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import '../../models/product.dart';
 import '../../providers/cart_provider.dart';
+import '../../providers/favorites_provider.dart';
 import '../../widgets/quantity_selector.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/helpers.dart';
@@ -19,12 +20,13 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   int qty = 1;
-  bool _isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
     final product = widget.product;
     final cartProvider = context.read<CartProvider>();
+    final favorites = context.watch<FavoritesProvider>();
+    final isFavorite = favorites.isFavorite(product.id);
     final String imageUrl = product.imageUrl;
     final bool isNetworkImage = imageUrl.startsWith('http');
     final bool isDataImage = imageUrl.startsWith('data:image');
@@ -117,15 +119,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   child: IconButton(
                     icon: Icon(
-                      _isFavorite
+                      isFavorite
                           ? Icons.favorite_rounded
                           : Icons.favorite_border_rounded,
-                      color: _isFavorite ? Colors.red : AppColors.textPrimary,
+                      color: isFavorite ? Colors.red : AppColors.textPrimary,
                       size: 20,
                     ),
                     splashRadius: 22,
                     onPressed: () {
-                      setState(() => _isFavorite = !_isFavorite);
+                      favorites.toggleFavorite(product.id);
                     },
                   ),
                 ),

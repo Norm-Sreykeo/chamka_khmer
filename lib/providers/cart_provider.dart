@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
-
-class CartItem {
-  final Product product;
-  int quantity;
-
-  CartItem({required this.product, this.quantity = 1});
-
-  double get totalPrice => product.price * quantity;
-}
+import '../models/cart_item.dart';
 
 class CartProvider extends ChangeNotifier {
   final Map<String, CartItem> _items = {};

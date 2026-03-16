@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
+import '../../providers/settings_provider.dart';
 
 /// កំណត់ ភាសា - ភាសាខ្មែរ, អង់គ្លេស
 class LanguageScreen extends StatefulWidget {
@@ -10,10 +12,11 @@ class LanguageScreen extends StatefulWidget {
 }
 
 class _LanguageScreenState extends State<LanguageScreen> {
-  int _selected = 0; // 0 Khmer, 1 English
-
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsProvider>();
+    final selected = settings.languageIndex;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -27,15 +30,21 @@ class _LanguageScreenState extends State<LanguageScreen> {
         children: [
           RadioListTile<int>(
             value: 0,
-            groupValue: _selected,
-            onChanged: (v) => setState(() => _selected = v!),
+            groupValue: selected,
+            onChanged: (v) {
+              if (v == null) return;
+              settings.setLanguageIndex(v);
+            },
             title: const Text("ភាសាខ្មែរ"),
             activeColor: AppColors.primary,
           ),
           RadioListTile<int>(
             value: 1,
-            groupValue: _selected,
-            onChanged: (v) => setState(() => _selected = v!),
+            groupValue: selected,
+            onChanged: (v) {
+              if (v == null) return;
+              settings.setLanguageIndex(v);
+            },
             title: const Text("អង់គ្លេស"),
             activeColor: AppColors.primary,
           ),

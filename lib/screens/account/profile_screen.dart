@@ -80,6 +80,7 @@ class ProfileScreen extends StatelessWidget {
             context,
             icon: Icons.history,
             title: "ប្រវត្តិការបញ្ជាទិញ",
+            iconColor: const Color(0xFF7FBF5F),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const OrderHistoryScreen()),
@@ -87,8 +88,9 @@ class ProfileScreen extends StatelessWidget {
           ),
           _menuTile(
             context,
-            icon: Icons.favorite_border,
+            icon: Icons.favorite_border_rounded,
             title: "ចំណូលចិត្ត",
+            iconColor: Colors.red,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const FavoritesScreen()),
@@ -98,6 +100,7 @@ class ProfileScreen extends StatelessWidget {
             context,
             icon: Icons.location_on_outlined,
             title: "អាសយដ្ឋាន",
+            iconColor: const Color(0xFFB07B4A),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const AddressScreen()),
@@ -107,6 +110,7 @@ class ProfileScreen extends StatelessWidget {
             context,
             icon: Icons.contact_phone_outlined,
             title: "ទំនាក់ទំនង",
+            iconColor: const Color(0xFFB07B4A),
             onTap: () {
               // Could open phone/email
             },
@@ -115,6 +119,7 @@ class ProfileScreen extends StatelessWidget {
             context,
             icon: Icons.settings,
             title: "ការកំណត់",
+            iconColor: const Color(0xFF6B6B6B),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const SettingsScreen()),
@@ -147,13 +152,27 @@ class ProfileScreen extends StatelessWidget {
     required IconData icon,
     required String title,
     required VoidCallback onTap,
+    Color? iconColor,
     Color? textColor,
   }) {
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
-        leading: Icon(icon, color: textColor ?? AppColors.primary),
+        leading: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: const Color(0xFFEDEDED),
+            borderRadius: BorderRadius.circular(999),
+          ),
+          alignment: Alignment.center,
+          child: Icon(
+            icon,
+            color: textColor ?? iconColor ?? AppColors.primary,
+            size: 22,
+          ),
+        ),
         title: Text(
           title,
           style: TextStyle(fontWeight: FontWeight.w500, color: textColor),
